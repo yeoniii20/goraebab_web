@@ -1,13 +1,15 @@
 import React from 'react';
-import Button from '../button/button';
-import Card from '../card/card';
-import { CARD_DATA } from '../../../data/mock';
+import { Button, Card } from '@/components';
 
-const Sidebar = () => {
+interface SidebarProps {
+  data: any[];
+}
+
+const Sidebar = ({ data }: SidebarProps) => {
   return (
     <div className="fixed top-0 left-0 w-[300px] h-full flex flex-col bg-white p-4 border-r-2 border-grey_2 pt-20">
       <div className="flex-grow overflow-y-auto scrollbar-hide">
-        {CARD_DATA.map((item, index) => (
+        {data.map((item, index) => (
           <Card
             key={index}
             id={item.id}
