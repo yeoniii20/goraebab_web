@@ -1,15 +1,17 @@
+import { Network } from '@/app/page';
+
 export const IMAGE_CARD_DATA = [
   {
     id: 'sha-image',
     size: '124.2MB',
     tags: 'httpd/latest',
-    status: 'success',
+    status: 'primary',
   },
   {
     id: 'sha-24546wdjnas930m-gkdlxkduwldk',
     size: '35.2MB',
     tags: 'httpd/latest',
-    status: 'success',
+    status: 'secondary',
   },
   {
     id: 'suyoooi-24546wdjnas930m',
@@ -72,6 +74,26 @@ export const VOLUME_CARD_DATA = [
     id: 'sha-24546network930m-network',
     size: '35.2MB',
     tags: 'httpd/latest',
-    status: 'success',
+    status: 'primary',
   },
 ];
+
+export const HOST_DATA = {
+  hostNm: 'Host Name',
+  ip: '12.34.56.67',
+  status: true,
+};
+
+export const NETWORK_DATA: Network = {
+  networkIp: '172.17.0.1',
+  containers: [
+    { name: 'naver-backend', ip: '172.17.0.2', status: 'running' },
+    { name: 'naver-frontend', ip: '172.17.0.3', status: 'stopped' },
+    { name: 'naver-frontend', ip: '172.17.0.3', status: 'running' },
+    { name: 'naver-frontend', ip: '172.17.0.3', status: 'stopped' },
+    { name: 'naver-frontend', ip: '172.17.0.3', status: 'running' },
+    { name: 'naver-frontend', ip: '172.17.0.3', status: 'stopped' },
+    { name: 'naver-frontend', ip: '172.17.0.3', status: 'stopped' },
+    { name: 'naver-frontend', ip: '172.17.0.3', status: 'stopped' },
+  ],
+};
