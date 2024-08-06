@@ -1,17 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Modal, OptionModal } from '@/components';
+import { useStore } from '@/store/cardStore';
 
 interface CardProps {
   id: string;
+  name?: string;
+  ip?: string;
   size: string;
   tags: string;
+  /**
+   * running
+   * stopped
+   */
+  active?: string;
   /**
    * primary
    * secondary
    * accent
-   * success
    */
   status: string;
+}
+
+interface CardDataProps {
+  data: CardProps;
 }
 
 /**
@@ -27,23 +38,22 @@ const getStatusColors = (status: string) => {
       return { bg1: '#f6d4d6', bg2: '#FF4853' };
     case 'accent':
       return { bg1: '#f6e3d1', bg2: '#FFA048' };
-    case 'success':
-      return { bg1: '#d1f6e2', bg2: '#25BD6B' };
     default:
       return { bg1: '#d1d1d1', bg2: '#7F7F7F' };
   }
 };
 
-const Card = ({ id, size, tags, status }: CardProps) => {
-  const { bg1, bg2 } = getStatusColors(status);
+const Card = ({ data }: CardDataProps) => {
+  const { bg1, bg2 } = getStatusColors(data.status);
   const [showOptions, setShowOptions] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+  const addContainer = useStore((state) => state.addContainer);
 
   const items = [
-    { label: 'ID', value: id },
-    { label: 'SIZE', value: size },
-    { label: 'TAGS', value: tags },
+    { label: 'ID', value: data.id },
+    { label: 'SIZE', value: data.size },
+    { label: 'TAGS', value: data.tags },
   ];
 
   const handleOptionClick = () => {
@@ -53,6 +63,10 @@ const Card = ({ id, size, tags, status }: CardProps) => {
   const handleGetInfo = () => {
     console.log('정보 가져오기 클릭됨');
     setShowOptions(false);
+  };
+
+  const handleRun = () => {
+    addContainer({ name: data.name, ip: data.ip, active: data.active });
   };
 
   const handleDelete = () => {
@@ -105,6 +119,7 @@ const Card = ({ id, size, tags, status }: CardProps) => {
             <div className="absolute top-4 left-16">
               <OptionModal
                 onTopHandler={handleGetInfo}
+                onMiddleHandler={handleRun}
                 onBottomHandler={handleDelete}
               />
             </div>
