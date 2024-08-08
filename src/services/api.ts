@@ -47,3 +47,8 @@ export const getDockerHubImages = async (query: string) => {
   const response = await axios.get(`/api/dockerHubSearch?query=${query}`);
   return response.data;
 };
+
+export const getContainersList = async () => {
+  const response = await axios.get('/api/docker/containers');
+  return response.data;
+};
