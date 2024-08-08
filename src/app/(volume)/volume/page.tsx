@@ -1,5 +1,6 @@
 'use client';
 
+import ContainersManagement from '@/components/docker/containersManagement';
 import DBManagement from '@/components/docker/dbManagement';
 import DockerManagement from '@/components/docker/dockerManagement';
 import HarborManagement from '@/components/docker/harborManagement';
@@ -11,6 +12,7 @@ const VolumePage = () => {
       <DockerManagement />
       <DBManagement />
       <HarborManagement />
+      <ContainersManagement />
     </>
   );
 };
