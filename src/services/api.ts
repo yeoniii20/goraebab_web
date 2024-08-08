@@ -14,22 +14,22 @@ export const deleteDocker = async (dockerId: string) => {
   await axios.delete(`/api/docker/delete?dockerId=${dockerId}`);
 };
 
-export const getdatabaseList = async () => {
+export const getDBList = async () => {
   const response = await axios.get('/api/database/list');
   return response.data;
 };
 
-export const registerdatabase = async (databaseDetails: any) => {
+export const registerDB = async (databaseDetails: any) => {
   const response = await axios.post('/api/database/register', databaseDetails);
   return response.data;
 };
 
-export const copydatabaseDesignToLocal = async () => {
+export const copyDBDesignToLocal = async () => {
   const response = await axios.post('/api/database/copy');
   return response.data;
 };
 
-export const deletedatabase = async (databaseId: string) => {
+export const deleteDB = async (databaseId: string) => {
   await axios.delete(`/api/database/delete?databaseId=${databaseId}`);
 };
 
