@@ -1,7 +1,7 @@
 import React from 'react';
-import { useStore } from '@/store/cardStore';
 
 export interface Container {
+  id: string;
   name?: string;
   ip?: string;
   active?: string;
@@ -9,18 +9,18 @@ export interface Container {
 
 export interface CardContainerProps {
   networkIp: string;
+  containers: Container[]; // containers를 props로 전달받음
 }
 
-const CardContainer = ({ networkIp }: CardContainerProps) => {
-  const containers = useStore((state) => state.containers);
-
+const CardContainer = ({ networkIp, containers }: CardContainerProps) => {
   return (
     <div className="flex flex-col items-center p-[10px] border bg-white border-grey_3 rounded-lg shadow-lg w-[450px]">
       <div className="w-full text-center bg-blue_1 text-blue_2 border-2 border-blue_2 p-2 rounded-md mb-3 text-sm font-semibold">
         {`docker0 : ${networkIp}`}
       </div>
       {containers.length > 0 ? (
-        <div className="w-full max-h-52 overflow-y-auto scrollbar-hide">
+        <div className="w-full">
+          {/* <div className="w-full max-h-52 overflow-y-auto scrollbar-hide"> */}
           {containers.map((container, index) => (
             <div
               key={index}
