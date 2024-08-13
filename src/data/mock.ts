@@ -118,8 +118,8 @@ export const HOST_DATA = {
 export const NETWORK_DATA = {
   networkIp: '172.17.0.1',
   containers: [
-    { name: 'naver-backend', ip: '172.17.0.2', status: 'running' },
-    { name: 'naver-frontend', ip: '172.17.0.3', status: 'stopped' },
-    { name: 'naver-frontend', ip: '172.17.0.3', status: 'running' },
+    { id: '1', name: 'naver-backend', ip: '172.17.0.2', status: 'running' },
+    { id: '2', name: 'naver-frontend', ip: '172.17.0.3', status: 'stopped' },
+    { id: '3', name: 'naver-frontend', ip: '172.17.0.3', status: 'running' },
   ],
 };
