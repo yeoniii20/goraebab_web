@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Card, ProgressBar } from '@/components';
+import { selectedHostStore } from '@/store/seletedHostStore';
 
 interface SidebarProps {
   data: any[];
@@ -7,11 +8,13 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ data, progress }: SidebarProps) => {
+  const { selectedHostId } = selectedHostStore();
+
   return (
     <div className="fixed top-0 left-0 w-[300px] h-full flex flex-col bg-white p-4 border-r-2 border-grey_2 pt-20">
       <div className="flex-grow overflow-y-auto scrollbar-hide">
         {data.map((item, index) => (
-          <Card key={index} data={item} />
+          <Card key={index} data={item} selectedHostId={selectedHostId} />
         ))}
       </div>
       <div className="flex-shrink-0">
