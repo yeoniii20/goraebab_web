@@ -7,11 +7,8 @@ import { TransformProvider } from '@/context/useTransformContext';
 import useHandModeSubscription from '@/hook/useHandModeSubscription';
 import { useHostStore } from '@/store/hostStore';
 
-interface ContainerPageProps {
-  handleAddHost?: (hostNm: string, ip: string) => void;
-}
-
-const ContainerPage = ({ handleAddHost }: ContainerPageProps) => {
+// Removed ContainerPageProps as it's not necessary
+const ContainerPage = () => {
   const [isHandMode, setIsHandMode] = React.useState(false);
 
   // Zustand에서 hosts 데이터를 가져옵니다.
