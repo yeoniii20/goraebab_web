@@ -1,6 +1,9 @@
+import { useHostStore } from '@/store/hostStore';
+import { selectedHostStore } from '@/store/seletedHostStore';
 import { FaHome } from 'react-icons/fa';
 
 export type HostCardProps = {
+  id: string;
   hostNm?: string;
   ip: string;
   /**
@@ -8,15 +11,34 @@ export type HostCardProps = {
    * disconnect: false
    */
   status?: boolean;
+  onClick?: () => void;
+  className?: string;
 };
 
-const HostCard = ({ hostNm, ip, status = true }: HostCardProps) => {
+const HostCard = ({
+  id,
+  hostNm,
+  ip,
+  status = true,
+  className = '',
+}: HostCardProps) => {
+  const { selectedHostId, setSelectedHostId } = selectedHostStore();
+
+  const handleClick = () => {
+    setSelectedHostId(selectedHostId === id ? null : id);
+  };
+
   const borderColor = status ? 'border-blue_2' : 'border-red_2';
   const bgColor = status ? 'bg-blue_1' : 'bg-red_1';
   const textColor = status ? 'text-blue_2' : 'text-red_2';
 
   return (
-    <div className="flex flex-col items-center p-[10px] border bg-white border-grey_3 rounded-lg shadow-lg w-72 h-28">
+    <div
+      onClick={handleClick}
+      className={`flex flex-col items-center p-[10px] border bg-white border-grey_3 rounded-lg shadow-lg w-72 h-28 z-0 transform transition-transform duration-200 cursor-pointer ${className} ${
+        selectedHostId === id ? 'scale-105 border-blue-500' : ''
+      }`}
+    >
       <div
         className={`flex items-center justify-center w-full space-x-2 rounded-md border-solid border-2 ${borderColor} ${bgColor} py-2 mb-3`}
       >
