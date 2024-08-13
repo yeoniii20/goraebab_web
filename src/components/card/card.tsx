@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Modal, OptionModal } from '@/components';
 import { useStore } from '@/store/cardStore';
+import { v4 as uuidv4 } from 'uuid';
 
 interface CardProps {
   id: string;
@@ -17,12 +18,14 @@ interface CardProps {
    * primary
    * secondary
    * accent
+   * success
    */
   status: string;
 }
 
 interface CardDataProps {
   data: CardProps;
+  selectedHostId: string | null; // 추가된 prop
 }
 
 /**
@@ -38,17 +41,20 @@ const getStatusColors = (status: string) => {
       return { bg1: '#f6d4d6', bg2: '#FF4853' };
     case 'accent':
       return { bg1: '#f6e3d1', bg2: '#FFA048' };
+    case 'success':
+      return { bg1: '#d1f6e2', bg2: '#25BD6B' };
     default:
       return { bg1: '#d1d1d1', bg2: '#7F7F7F' };
   }
 };
 
-const Card = ({ data }: CardDataProps) => {
-  const { bg1, bg2 } = getStatusColors(data.status);
+const Card = ({ data, selectedHostId }: CardDataProps) => {
+  const id = uuidv4();
+  const { bg1, bg2 } = getStatusColors(data.status || 'primary');
   const [showOptions, setShowOptions] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
-  const addContainer = useStore((state) => state.addContainer);
+  const addContainerToHost = useStore((state) => state.addContainerToHost);
 
   const items = [
     { label: 'ID', value: data.id },
@@ -66,7 +72,18 @@ const Card = ({ data }: CardDataProps) => {
   };
 
   const handleRun = () => {
-    addContainer({ name: data.name, ip: data.ip, active: data.active });
+    if (selectedHostId) {
+      const newContainer = {
+        id: uuidv4(),
+        name: data.name,
+        ip: data.ip,
+        active: data.active,
+      };
+      addContainerToHost(selectedHostId, newContainer);
+    } else {
+      console.log('호스트를 선택하세요');
+    }
+    setShowOptions(false);
   };
 
   const handleDelete = () => {
@@ -134,7 +151,7 @@ const Card = ({ data }: CardDataProps) => {
               {item.label}
             </span>
             <span className="font-semibold text-xs truncate max-w-[150px]">
-              {item.value}
+              {item.value} {item.label === 'SIZE' ? 'MB' : null}
             </span>
           </div>
         ))}
