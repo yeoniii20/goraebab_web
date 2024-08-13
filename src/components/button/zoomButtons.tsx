@@ -1,78 +1,101 @@
 'use client';
 
-import { useHandModeStore } from '@/store/handModeStore';
-import React, { useEffect } from 'react';
-import { FaMousePointer, FaHandPaper } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { FaSearchPlus, FaSearchMinus } from 'react-icons/fa';
 
-const PanButtons = () => {
-  const isHandMode = useHandModeStore((state) => state.isHandMode);
-  const setHandMode = useHandModeStore((state) => state.setHandMode);
+const ZoomButtons = () => {
+  const [zoomLevel, setZoomLevel] = useState(100);
+  const [isShiftPressed, setIsShiftPressed] = useState(false);
 
-  useEffect(() => {
-    const handlePan = (event: MouseEvent) => {
-      if (isHandMode && event.buttons === 1) {
-        event.preventDefault();
-        window.scrollBy(-event.movementX, -event.movementY);
-      }
-    };
+  /**
+   * 최대 200%까지 확대
+   */
+  const handleZoomIn = () => {
+    setZoomLevel((prev) => {
+      const newZoom = Math.min(prev + 10, 200);
+      updateZoom(newZoom);
+      return newZoom;
+    });
+  };
 
-    window.addEventListener('mousemove', handlePan);
-    return () => {
-      window.removeEventListener('mousemove', handlePan);
-    };
-  }, [isHandMode]);
+  /**
+   * 최소 50%까지 축소
+   */
+  const handleZoomOut = () => {
+    setZoomLevel((prev) => {
+      const newZoom = Math.max(prev - 10, 50);
+      updateZoom(newZoom);
+      return newZoom;
+    });
+  };
 
-  useEffect(() => {
+  const updateZoom = (zoom: number) => {
     const mainElement = document.querySelector('main');
-    if (isHandMode && mainElement) {
-      mainElement.classList.add('hand-mode');
-      const handleMouseDown = () => {
-        mainElement.classList.add('grabbing');
-      };
-      const handleMouseUp = () => {
-        mainElement.classList.remove('grabbing');
-      };
-      mainElement.addEventListener('mousedown', handleMouseDown);
-      mainElement.addEventListener('mouseup', handleMouseUp);
-      return () => {
-        mainElement.removeEventListener('mousedown', handleMouseDown);
-        mainElement.removeEventListener('mouseup', handleMouseUp);
-      };
-    } else if (mainElement) {
-      mainElement.classList.remove('hand-mode');
-      mainElement.classList.remove('grabbing');
+    if (mainElement) {
+      mainElement.style.zoom = `${zoom}%`;
     }
-  }, [isHandMode]);
-
-  const handleMouseClick = () => {
-    setHandMode(false);
   };
 
-  const handleHandClick = () => {
-    setHandMode(true);
+  /**
+   * wheel로 zoomIn, zoomOut
+   * @param event WheelEvent
+   */
+  const handleWheel = (event: WheelEvent) => {
+    if (isShiftPressed) {
+      console.log('Shift 키 눌렀음:::');
+      // Shift 키를 누르고 있을 때만 확대/축소
+      event.preventDefault();
+      if (event.deltaY < 0) {
+        handleZoomIn();
+      } else {
+        handleZoomOut();
+      }
+    } else {
+      console.log('Shift 키 누르지 않음');
+    }
   };
+
+  /**
+   * shift key 감지
+   * @param event keyboardEvent
+   */
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Shift') {
+      setIsShiftPressed(true);
+    }
+  };
+
+  const handleKeyUp = (event: KeyboardEvent) => {
+    if (event.key === 'Shift') {
+      setIsShiftPressed(false);
+    }
+  };
+
+  useEffect(() => {
+    console.log('이벤트 리스너 추가됨');
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      console.log('이벤트 리스너 제거됨');
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [isShiftPressed]);
 
   return (
-    <div className="fixed bottom-4 left-[445px] transform translate-x-4 w-[130px] h-[50px] p-3 bg-white rounded-lg shadow-lg flex items-center justify-between">
-      <button
-        className={`p-2 rounded-full ${
-          !isHandMode ? 'bg-blue_1 text-blue_2' : 'text-black'
-        }`}
-        onClick={handleMouseClick}
-      >
-        <FaMousePointer size={20} />
+    <div className="fixed bottom-4 left-[300px] transform translate-x-4 w-[130px] h-[50px] p-3 bg-white rounded-lg shadow-lg flex items-center justify-between">
+      <button onClick={handleZoomOut}>
+        <FaSearchMinus size={20} />
       </button>
-      <div className="mx-2 border-r h-full"></div>
-      <button
-        className={`p-2 rounded-full ${
-          isHandMode ? 'bg-blue_1 text-blue_2' : 'text-black'
-        }`}
-        onClick={handleHandClick}
-      >
-        <FaHandPaper size={20} />
+      <span className="text-lg font-semibold text-grey_6">{zoomLevel}%</span>
+      <button onClick={handleZoomIn}>
+        <FaSearchPlus size={20} />
       </button>
     </div>
   );
 };
 
-export default PanButtons;
+export default ZoomButtons;
