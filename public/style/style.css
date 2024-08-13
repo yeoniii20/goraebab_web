@@ -36,3 +36,13 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* cursor */
+
+.grabbing {
+  cursor: grabbing;
+}
+.grab {
+  cursor: grab;
+}
+
