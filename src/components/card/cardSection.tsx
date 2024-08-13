@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CardContainer, ConnectBar, HostCard } from '@/components';
 import { CardContainerProps } from './cardContainer';
 import { HostCardProps } from './hostCard';
 import Draggable from 'react-draggable';
+import { useStore } from '@/store/cardStore';
+import { selectedHostStore } from '@/store/seletedHostStore';
 
 interface CardSectionProps {
-  hostData: HostCardProps;
+  hostData: HostCardProps[];
   containerData: CardContainerProps;
   isHandMode: boolean;
 }
@@ -15,19 +17,42 @@ const CardSection = ({
   containerData,
   isHandMode,
 }: CardSectionProps) => {
+  const { selectedHostId } = selectedHostStore(); // 선택된 호스트 ID를 가져옴
+
+  const handleHostClick = (id: string) => {
+    selectedHostStore.setState({
+      selectedHostId: selectedHostId === id ? null : id,
+    });
+  };
+
   return (
     <Draggable disabled={!isHandMode}>
-      <div
-        className="flex space-x-0"
-        style={{ cursor: isHandMode ? 'grab' : 'default' }}
-      >
-        <HostCard
-          hostNm={hostData.hostNm}
-          ip={hostData.ip}
-          status={hostData.status}
-        />
-        <ConnectBar />
-        <CardContainer networkIp={containerData.networkIp} />
+      <div className="flex">
+        {hostData.map((host) => {
+          const containers = useStore(
+            (state) => state.hostContainers[host.id] || []
+          ); // 해당 호스트의 컨테이너를 가져옴
+
+          return (
+            <div key={host.id} className="flex">
+              <HostCard
+                id={host.id}
+                hostNm={host.hostNm}
+                ip={host.ip}
+                status={host.status}
+                onClick={() => handleHostClick(host.id)}
+                className={
+                  selectedHostId === host.id ? 'scale-105 border-blue-500' : ''
+                }
+              />
+              <ConnectBar />
+              <CardContainer
+                networkIp={containerData.networkIp}
+                containers={containers} // 선택된 호스트의 컨테이너만 전달
+              />
+            </div>
+          );
+        })}
       </div>
     </Draggable>
   );
