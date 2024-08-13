@@ -1,18 +1,14 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useHandModeStore } from '@/store/handModeStore';
+import React, { useEffect } from 'react';
 import { FaMousePointer, FaHandPaper } from 'react-icons/fa';
 
-interface PanBtnProps {
-  setIsHandMode: (isHandMode: boolean) => void;
-}
-
-const PanButtons = ({ setIsHandMode }: PanBtnProps) => {
-  const [isHandMode, setIsHandModeLocal] = useState(false);
+const PanButtons = () => {
+  const isHandMode = useHandModeStore((state) => state.isHandMode);
+  const setHandMode = useHandModeStore((state) => state.setHandMode);
 
   useEffect(() => {
-    setIsHandMode(isHandMode);
-
     const handlePan = (event: MouseEvent) => {
       if (isHandMode && event.buttons === 1) {
         event.preventDefault();
@@ -49,13 +45,11 @@ const PanButtons = ({ setIsHandMode }: PanBtnProps) => {
   }, [isHandMode]);
 
   const handleMouseClick = () => {
-    setIsHandModeLocal(false);
-    setIsHandMode(false);
+    setHandMode(false);
   };
 
   const handleHandClick = () => {
-    setIsHandModeLocal(true);
-    setIsHandMode(true);
+    setHandMode(true);
   };
 
   return (
