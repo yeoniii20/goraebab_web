@@ -8,6 +8,14 @@ import { showSnackbar } from '@/utils/toastUtils';
 
 const AddHostButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [availableNetworks, setAvailableNetworks] = useState<
+    { name: string; ip: string }[]
+  >([
+    { name: 'bridge', ip: '172.17.0.1' },
+    { name: 'host', ip: '192.168.1.1' },
+    { name: 'custom-network', ip: '10.0.0.1' },
+  ]); // 네트워크 상태 추가
+
   const { enqueueSnackbar } = useSnackbar();
   const addHost = useHostStore((state) => state.addHost);
 
@@ -21,9 +29,20 @@ const AddHostButton = () => {
       bgColor: string;
       borderColor: string;
       textColor: string;
-    }
+    },
+    networkName: string, // 추가된 네트워크 정보
+    networkIp: string // 추가된 네트워크 IP
   ) => {
-    const newHost = { id, hostNm, ip, status: true, isRemote, themeColor };
+    const newHost = {
+      id,
+      hostNm,
+      ip,
+      status: true,
+      isRemote,
+      themeColor,
+      networkName, // 네트워크 이름 저장
+      networkIp, // 네트워크 IP 저장
+    };
 
     // Zustand에 저장
     addHost(newHost);
@@ -52,6 +71,7 @@ const AddHostButton = () => {
           <HostModal
             onClose={() => setIsModalOpen(false)}
             onSave={handleAddHost}
+            availableNetworks={availableNetworks} // 네트워크 목록 전달
           />
         )}
       </div>
