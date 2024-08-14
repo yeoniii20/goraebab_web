@@ -130,7 +130,7 @@ const HostModal = ({ onClose, onSave }: HostModalProps) => {
                       ? 'ring-2 ring-offset-2 ring-blue-500'
                       : ''
                   }`}
-                  style={{ backgroundColor: color.color }} // 인라인 스타일로 색상 적용
+                  style={{ backgroundColor: color.color }}
                 />
               ))}
           </div>

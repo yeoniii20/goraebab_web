@@ -4,7 +4,9 @@ interface Host {
   id: string;
   hostNm: string;
   ip: string;
-  status: boolean;
+  status?: boolean;
+  isRemote: boolean;
+  themeColor: any;
 }
 
 interface HostStore {

@@ -15,9 +15,15 @@ const AddHostButton = () => {
     id: string,
     hostNm: string,
     ip: string,
-    isRemote: boolean
+    isRemote: boolean,
+    themeColor: {
+      label: string;
+      bgColor: string;
+      borderColor: string;
+      textColor: string;
+    }
   ) => {
-    const newHost = { id, hostNm, ip, status: true, isRemote };
+    const newHost = { id, hostNm, ip, status: true, isRemote, themeColor };
 
     // Zustand에 저장
     addHost(newHost);

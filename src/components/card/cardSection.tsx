@@ -1,11 +1,15 @@
 import React from 'react';
 import { CardContainer, ConnectBar, HostCard } from '@/components';
-import { CardContainerProps } from './cardContainer';
 import { HostCardProps } from './hostCard';
 import Draggable from 'react-draggable';
 import { useStore } from '@/store/cardStore';
 import { selectedHostStore } from '@/store/seletedHostStore';
+import { Container } from './cardContainer';
 
+interface CardContainerProps {
+  networkIp: string;
+  containers: Container[];
+}
 interface CardSectionProps {
   hostData: HostCardProps[];
   containerData: CardContainerProps;
@@ -48,10 +52,11 @@ const CardSection = ({
                 isRemote={host.isRemote}
                 themeColor={host.themeColor}
               />
-              <ConnectBar />
+              <ConnectBar themeColor={host.themeColor} />
               <CardContainer
                 networkIp={containerData.networkIp}
                 containers={containers} // 선택된 호스트의 컨테이너만 전달
+                themeColor={host.themeColor}
               />
             </div>
           );
