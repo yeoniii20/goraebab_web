@@ -32,7 +32,7 @@ const HostCard = ({
     setSelectedHostId(selectedHostId === id ? null : id);
   };
 
-  const borderColor = themeColor.borderColor;
+  const borderColor = selectedHostId === id ? themeColor.borderColor : 'grey';
   const bgColor = themeColor.bgColor;
   const textColor = themeColor.textColor;
 
@@ -46,8 +46,12 @@ const HostCard = ({
     <div
       onClick={handleClick}
       className={`flex flex-col items-center p-[10px] border bg-white rounded-lg shadow-lg w-72 h-28 z-0 transform transition-transform duration-200 cursor-pointer ${className} ${
-        selectedHostId === id ? 'scale-102 border-2' : 'border-grey_3'
+        selectedHostId === id ? 'scale-102' : ''
       }`}
+      style={{
+        borderColor: borderColor,
+        borderWidth: selectedHostId === id ? '2px' : '1px',
+      }}
     >
       <div
         className={`flex items-center justify-center w-full space-x-2 rounded-md border-solid border-2 py-2 mb-3`}
