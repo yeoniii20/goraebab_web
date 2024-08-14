@@ -33,11 +33,10 @@ const CardContainer = ({
           color: `${themeColor.textColor}`,
         }}
       >
-        {`docker0 : ${networkIp}`}
+        {`docker0 : ${networkIp}`} {/* 네트워크 IP 표시 */}
       </div>
       {containers.length > 0 ? (
         <div className="w-full">
-          {/* <div className="w-full max-h-52 overflow-y-auto scrollbar-hide"> */}
           {containers.map((container, index) => (
             <div
               key={index}

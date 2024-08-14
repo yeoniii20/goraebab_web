@@ -7,9 +7,10 @@ import { selectedHostStore } from '@/store/seletedHostStore';
 import { Container } from './cardContainer';
 
 interface CardContainerProps {
-  networkIp: string;
+  networkIp: string | undefined;
   containers: Container[];
 }
+
 interface CardSectionProps {
   hostData: HostCardProps[];
   containerData: CardContainerProps;
@@ -51,10 +52,11 @@ const CardSection = ({
                 }
                 isRemote={host.isRemote}
                 themeColor={host.themeColor}
+                networkIp={host.networkIp}
               />
               <ConnectBar themeColor={host.themeColor} />
               <CardContainer
-                networkIp={containerData.networkIp}
+                networkIp={host.networkIp} // 네트워크 IP 전달
                 containers={containers} // 선택된 호스트의 컨테이너만 전달
                 themeColor={host.themeColor}
               />
