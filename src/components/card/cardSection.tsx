@@ -45,6 +45,8 @@ const CardSection = ({
                 className={
                   selectedHostId === host.id ? 'scale-105 border-blue-500' : ''
                 }
+                isRemote={host.isRemote}
+                themeColor={host.themeColor}
               />
               <ConnectBar />
               <CardContainer
