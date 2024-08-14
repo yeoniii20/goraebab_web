@@ -18,16 +18,25 @@ interface HostModalProps {
     hostNm: string,
     ip: string,
     isRemote: boolean,
-    themeColor: ThemeColor
+    themeColor: ThemeColor,
+    networkName: string, // 추가된 네트워크 이름
+    networkIp: string // 추가된 네트워크 IP
   ) => void;
+  availableNetworks: { name: string; ip: string }[]; // 네트워크 이름과 IP 목록
 }
 
-const HostModal = ({ onClose, onSave }: HostModalProps) => {
+const HostModal = ({ onClose, onSave, availableNetworks }: HostModalProps) => {
   const id = uuidv4();
 
   const [isRemote, setIsRemote] = useState<boolean>(false);
   const [hostNm, setHostNm] = useState<string>('');
   const [ip, setIp] = useState<string>('');
+  const [networkName, setNetworkName] = useState<string>(
+    availableNetworks[0]?.name || ''
+  );
+  const [networkIp, setNetworkIp] = useState<string>(
+    availableNetworks[0]?.ip || ''
+  );
 
   // Initialize with the first color option as default
   const defaultColor = colorsOption.find((color) => !color.sub);
@@ -60,7 +69,7 @@ const HostModal = ({ onClose, onSave }: HostModalProps) => {
       return;
     }
 
-    onSave(id, hostNm, ip, isRemote, selectedColor);
+    onSave(id, hostNm, ip, isRemote, selectedColor, networkName, networkIp);
     onClose();
   };
 
@@ -78,6 +87,14 @@ const HostModal = ({ onClose, onSave }: HostModalProps) => {
       borderColor: mainColor?.color || '',
       textColor: mainColor?.color || '',
     });
+  };
+
+  const handleNetworkChange = (selectedNetworkName: string) => {
+    const selectedNetwork = availableNetworks.find(
+      (net) => net.name === selectedNetworkName
+    );
+    setNetworkName(selectedNetworkName);
+    setNetworkIp(selectedNetwork?.ip || '');
   };
 
   return (
@@ -123,6 +140,22 @@ const HostModal = ({ onClose, onSave }: HostModalProps) => {
             Remote
           </label>
         </div>
+
+        <div className="mb-4">
+          <h3 className="text-md font-semibold mb-2">Select Network:</h3>
+          <select
+            value={networkName}
+            onChange={(e) => handleNetworkChange(e.target.value)}
+            className="p-2 border border-gray-300 rounded w-full"
+          >
+            {availableNetworks.map((net) => (
+              <option key={net.name} value={net.name}>
+                {net.name} (IP: {net.ip})
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div className="mb-4">
           <h3 className="text-md font-semibold mb-2">Select Color Theme:</h3>
           <div className="flex space-x-2">
