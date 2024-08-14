@@ -16,7 +16,7 @@ interface HostModalProps {
       bgColor: string;
       borderColor: string;
       textColor: string;
-    } // 수정된 타입 정의
+    }
   ) => void;
 }
 
@@ -26,7 +26,21 @@ const HostModal = ({ onClose, onSave }: HostModalProps) => {
   const [isRemote, setIsRemote] = useState<boolean>(false);
   const [hostNm, setHostNm] = useState<string>('');
   const [ip, setIp] = useState<string>('');
-  const [selectedColor, setSelectedColor] = useState<any>(null); // 타입을 변경하여 객체를 저장
+
+  // Initialize with the first color option as default
+  const defaultColor = colorsOption.find((color) => !color.sub);
+  const defaultSubColor = colorsOption.find(
+    (color) => color.label === defaultColor?.label && color.sub
+  );
+
+  const [selectedColor, setSelectedColor] = useState<any>({
+    label: defaultColor?.label || '',
+    color: defaultColor?.color || '',
+    subColor: {
+      bgColor: defaultSubColor?.color || '',
+    },
+  });
+
   const { enqueueSnackbar } = useSnackbar();
 
   const handleSave = () => {
