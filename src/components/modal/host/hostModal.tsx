@@ -1,20 +1,32 @@
-'use client';
-
 import React, { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { v4 as uuidv4 } from 'uuid';
 import { showSnackbar } from '@/utils/toastUtils';
+import { colorsOption } from '@/data/color';
 
 interface HostModalProps {
   onClose: () => void;
-  onSave: (id: string, hostNm: string, ip: string) => void;
+  onSave: (
+    id: string,
+    hostNm: string,
+    ip: string,
+    isRemote: boolean,
+    themeColor: {
+      label: string;
+      bgColor: string;
+      borderColor: string;
+      textColor: string;
+    } // 수정된 타입 정의
+  ) => void;
 }
 
 const HostModal = ({ onClose, onSave }: HostModalProps) => {
   const id = uuidv4();
 
-  const [hostNm, setHostNm] = useState('');
-  const [ip, setIp] = useState('');
+  const [isRemote, setIsRemote] = useState<boolean>(false);
+  const [hostNm, setHostNm] = useState<string>('');
+  const [ip, setIp] = useState<string>('');
+  const [selectedColor, setSelectedColor] = useState<any>(null); // 타입을 변경하여 객체를 저장
   const { enqueueSnackbar } = useSnackbar();
 
   const handleSave = () => {
@@ -34,8 +46,31 @@ const HostModal = ({ onClose, onSave }: HostModalProps) => {
     }
 
     // 유효성 검사가 완료된 후 onSave 호출
-    onSave(id, hostNm, ip);
+    if (selectedColor) {
+      onSave(id, hostNm, ip, isRemote, {
+        label: selectedColor.label,
+        bgColor: selectedColor.subColor.bgColor,
+        borderColor: selectedColor.color,
+        textColor: selectedColor.color,
+      });
+    }
     onClose();
+  };
+
+  const handleColorSelection = (colorLabel: string) => {
+    const mainColor = colorsOption.find(
+      (color) => color.label === colorLabel && !color.sub
+    );
+    const subColor = colorsOption.find(
+      (color) => color.label === colorLabel && color.sub
+    );
+    setSelectedColor({
+      label: colorLabel,
+      color: mainColor?.color || '',
+      subColor: {
+        bgColor: subColor?.color || '',
+      },
+    });
   };
 
   return (
@@ -57,6 +92,50 @@ const HostModal = ({ onClose, onSave }: HostModalProps) => {
           onChange={(e) => setIp(e.target.value)}
           className="mb-4 p-2 border border-gray-300 rounded w-full"
         />
+        <div className="mb-4">
+          <label className="mr-4">
+            <input
+              type="radio"
+              name="hostType"
+              value="local"
+              checked={!isRemote}
+              onChange={() => setIsRemote(false)}
+              className="mr-2"
+            />
+            Local
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="hostType"
+              value="remote"
+              checked={isRemote}
+              onChange={() => setIsRemote(true)}
+              className="mr-2"
+            />
+            Remote
+          </label>
+        </div>
+        <div className="mb-4">
+          <h3 className="text-md font-semibold mb-2">Select Color Theme:</h3>
+          <div className="flex space-x-2">
+            {colorsOption
+              .filter((color) => !color.sub)
+              .map((color) => (
+                <div
+                  key={color.id}
+                  onClick={() => handleColorSelection(color.label)}
+                  className={`w-6 h-6 rounded-full cursor-pointer ${
+                    selectedColor?.label === color.label
+                      ? 'ring-2 ring-offset-2 ring-blue-500'
+                      : ''
+                  }`}
+                  style={{ backgroundColor: color.color }} // 인라인 스타일로 색상 적용
+                />
+              ))}
+          </div>
+        </div>
+
         <div className="flex justify-end space-x-2">
           <button
             onClick={onClose}
