@@ -27,6 +27,12 @@ const config: Config = {
         yellow_2: '#FFA048',
         green_1: '#d1f6e2',
         green_2: '#25BD6B',
+        purple_1: '#ffe6ff',
+        purple_2: '#e682e6',
+        pink_1: '#fff4f6',
+        pink_2: '#ff94aa',
+        navy_1: '#c3d6e1',
+        navy_2: '#4b85a4',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

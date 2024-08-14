@@ -10,12 +10,29 @@ export interface Container {
 export interface CardContainerProps {
   networkIp: string;
   containers: Container[]; // containers를 props로 전달받음
+  themeColor: {
+    label: string;
+    bgColor: string;
+    borderColor: string;
+    textColor: string;
+  };
 }
 
-const CardContainer = ({ networkIp, containers }: CardContainerProps) => {
+const CardContainer = ({
+  networkIp,
+  containers,
+  themeColor,
+}: CardContainerProps) => {
   return (
     <div className="flex flex-col items-center p-[10px] border bg-white border-grey_3 rounded-lg shadow-lg w-[450px]">
-      <div className="w-full text-center bg-blue_1 text-blue_2 border-2 border-blue_2 p-2 rounded-md mb-3 text-sm font-semibold">
+      <div
+        className="w-full text-center text-blue_2 border-2 p-2 rounded-md mb-3 text-sm font-semibold"
+        style={{
+          borderColor: `${themeColor.borderColor}`,
+          backgroundColor: `${themeColor.bgColor}`,
+          color: `${themeColor.textColor}`,
+        }}
+      >
         {`docker0 : ${networkIp}`}
       </div>
       {containers.length > 0 ? (

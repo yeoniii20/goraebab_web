@@ -11,8 +11,19 @@ const AddHostButton = () => {
   const { enqueueSnackbar } = useSnackbar();
   const addHost = useHostStore((state) => state.addHost);
 
-  const handleAddHost = (id: string, hostNm: string, ip: string) => {
-    const newHost = { id, hostNm, ip, status: true };
+  const handleAddHost = (
+    id: string,
+    hostNm: string,
+    ip: string,
+    isRemote: boolean,
+    themeColor: {
+      label: string;
+      bgColor: string;
+      borderColor: string;
+      textColor: string;
+    }
+  ) => {
+    const newHost = { id, hostNm, ip, status: true, isRemote, themeColor };
 
     // Zustand에 저장
     addHost(newHost);
