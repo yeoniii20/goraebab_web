@@ -4,6 +4,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { showSnackbar } from '@/utils/toastUtils';
 import { colorsOption } from '@/data/color';
 
+interface ThemeColor {
+  label: string;
+  bgColor: string;
+  borderColor: string;
+  textColor: string;
+}
+
 interface HostModalProps {
   onClose: () => void;
   onSave: (
@@ -11,12 +18,7 @@ interface HostModalProps {
     hostNm: string,
     ip: string,
     isRemote: boolean,
-    themeColor: {
-      label: string;
-      bgColor: string;
-      borderColor: string;
-      textColor: string;
-    }
+    themeColor: ThemeColor
   ) => void;
 }
 
@@ -33,12 +35,11 @@ const HostModal = ({ onClose, onSave }: HostModalProps) => {
     (color) => color.label === defaultColor?.label && color.sub
   );
 
-  const [selectedColor, setSelectedColor] = useState<any>({
+  const [selectedColor, setSelectedColor] = useState<ThemeColor>({
     label: defaultColor?.label || '',
-    color: defaultColor?.color || '',
-    subColor: {
-      bgColor: defaultSubColor?.color || '',
-    },
+    bgColor: defaultSubColor?.color || '',
+    borderColor: defaultColor?.color || '',
+    textColor: defaultColor?.color || '',
   });
 
   const { enqueueSnackbar } = useSnackbar();
@@ -59,15 +60,7 @@ const HostModal = ({ onClose, onSave }: HostModalProps) => {
       return;
     }
 
-    // 유효성 검사가 완료된 후 onSave 호출
-    if (selectedColor) {
-      onSave(id, hostNm, ip, isRemote, {
-        label: selectedColor.label,
-        bgColor: selectedColor.subColor.bgColor,
-        borderColor: selectedColor.color,
-        textColor: selectedColor.color,
-      });
-    }
+    onSave(id, hostNm, ip, isRemote, selectedColor);
     onClose();
   };
 
@@ -78,12 +71,12 @@ const HostModal = ({ onClose, onSave }: HostModalProps) => {
     const subColor = colorsOption.find(
       (color) => color.label === colorLabel && color.sub
     );
+
     setSelectedColor({
       label: colorLabel,
-      color: mainColor?.color || '',
-      subColor: {
-        bgColor: subColor?.color || '',
-      },
+      bgColor: subColor?.color || '',
+      borderColor: mainColor?.color || '',
+      textColor: mainColor?.color || '',
     });
   };
 
