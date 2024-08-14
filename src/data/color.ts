@@ -1,25 +1,3 @@
-const colorOptions = ['blue', 'red', 'yellow', 'green', 'pink', 'navy'];
-
-const colorOptions1 = [
-  { blue_1: '#d2d1f6' },
-  { red_1: '#f6d4d6' },
-  { yellow_1: '#f6e3d1' },
-  { green_1: '#d1f6e2' },
-  { purple_1: '#ffe6ff' },
-  { pink_1: '#fff4f6' },
-  { navy_1: '#c3d6e1' },
-];
-
-const colorOptions2 = [
-  { blue_2: '#4C48FF' },
-  { red_2: '#FF4853' },
-  { yellow_2: '#FFA048' },
-  { green_2: '#25BD6B' },
-  { purple_2: '#e682e6' },
-  { pink_2: '#ff94aa' },
-  { navy_2: '#4b85a4' },
-];
-
 export const colorsOption = [
   { id: 1, label: 'blue', color: '#4C48FF', sub: false },
   { id: 2, label: 'blue', color: '#d2d1f6', sub: true },
@@ -29,4 +7,10 @@ export const colorsOption = [
   { id: 6, label: 'yellow', color: '#f6e3d1', sub: true },
   { id: 7, label: 'green', color: '#25BD6B', sub: false },
   { id: 8, label: 'green', color: '#d1f6e2', sub: true },
+  { id: 9, label: 'purple', color: '#e682e6', sub: false },
+  { id: 10, label: 'purple', color: '#ffe6ff', sub: true },
+  { id: 11, label: 'pink', color: '#ff94aa', sub: false },
+  { id: 12, label: 'pink', color: '#fff4f6', sub: true },
+  { id: 13, label: 'navy', color: '#4b85a4', sub: false },
+  { id: 14, label: 'navy', color: '#c3d6e1', sub: true },
 ];
