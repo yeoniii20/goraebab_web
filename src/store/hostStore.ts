@@ -7,6 +7,7 @@ interface Host {
   status?: boolean;
   isRemote: boolean;
   themeColor: any;
+  networkIp: string;
 }
 
 interface HostStore {

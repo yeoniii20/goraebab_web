@@ -13,6 +13,7 @@ export type HostCardProps = {
     borderColor: string;
     textColor: string;
   };
+  networkIp: string;
   onClick?: () => void;
   className?: string;
 };

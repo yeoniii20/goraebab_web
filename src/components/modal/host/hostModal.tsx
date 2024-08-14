@@ -4,6 +4,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { showSnackbar } from '@/utils/toastUtils';
 import { colorsOption } from '@/data/color';
 
+interface ThemeColor {
+  label: string;
+  bgColor: string;
+  borderColor: string;
+  textColor: string;
+}
+
 interface HostModalProps {
   onClose: () => void;
   onSave: (
@@ -11,21 +18,25 @@ interface HostModalProps {
     hostNm: string,
     ip: string,
     isRemote: boolean,
-    themeColor: {
-      label: string;
-      bgColor: string;
-      borderColor: string;
-      textColor: string;
-    }
+    themeColor: ThemeColor,
+    networkName: string, // 추가된 네트워크 이름
+    networkIp: string // 추가된 네트워크 IP
   ) => void;
+  availableNetworks: { name: string; ip: string }[]; // 네트워크 이름과 IP 목록
 }
 
-const HostModal = ({ onClose, onSave }: HostModalProps) => {
+const HostModal = ({ onClose, onSave, availableNetworks }: HostModalProps) => {
   const id = uuidv4();
 
   const [isRemote, setIsRemote] = useState<boolean>(false);
   const [hostNm, setHostNm] = useState<string>('');
   const [ip, setIp] = useState<string>('');
+  const [networkName, setNetworkName] = useState<string>(
+    availableNetworks[0]?.name || ''
+  );
+  const [networkIp, setNetworkIp] = useState<string>(
+    availableNetworks[0]?.ip || ''
+  );
 
   // Initialize with the first color option as default
   const defaultColor = colorsOption.find((color) => !color.sub);
@@ -33,12 +44,11 @@ const HostModal = ({ onClose, onSave }: HostModalProps) => {
     (color) => color.label === defaultColor?.label && color.sub
   );
 
-  const [selectedColor, setSelectedColor] = useState<any>({
+  const [selectedColor, setSelectedColor] = useState<ThemeColor>({
     label: defaultColor?.label || '',
-    color: defaultColor?.color || '',
-    subColor: {
-      bgColor: defaultSubColor?.color || '',
-    },
+    bgColor: defaultSubColor?.color || '',
+    borderColor: defaultColor?.color || '',
+    textColor: defaultColor?.color || '',
   });
 
   const { enqueueSnackbar } = useSnackbar();
@@ -59,15 +69,7 @@ const HostModal = ({ onClose, onSave }: HostModalProps) => {
       return;
     }
 
-    // 유효성 검사가 완료된 후 onSave 호출
-    if (selectedColor) {
-      onSave(id, hostNm, ip, isRemote, {
-        label: selectedColor.label,
-        bgColor: selectedColor.subColor.bgColor,
-        borderColor: selectedColor.color,
-        textColor: selectedColor.color,
-      });
-    }
+    onSave(id, hostNm, ip, isRemote, selectedColor, networkName, networkIp);
     onClose();
   };
 
@@ -78,13 +80,21 @@ const HostModal = ({ onClose, onSave }: HostModalProps) => {
     const subColor = colorsOption.find(
       (color) => color.label === colorLabel && color.sub
     );
+
     setSelectedColor({
       label: colorLabel,
-      color: mainColor?.color || '',
-      subColor: {
-        bgColor: subColor?.color || '',
-      },
+      bgColor: subColor?.color || '',
+      borderColor: mainColor?.color || '',
+      textColor: mainColor?.color || '',
     });
+  };
+
+  const handleNetworkChange = (selectedNetworkName: string) => {
+    const selectedNetwork = availableNetworks.find(
+      (net) => net.name === selectedNetworkName
+    );
+    setNetworkName(selectedNetworkName);
+    setNetworkIp(selectedNetwork?.ip || '');
   };
 
   return (
@@ -130,6 +140,22 @@ const HostModal = ({ onClose, onSave }: HostModalProps) => {
             Remote
           </label>
         </div>
+
+        <div className="mb-4">
+          <h3 className="text-md font-semibold mb-2">Select Network:</h3>
+          <select
+            value={networkName}
+            onChange={(e) => handleNetworkChange(e.target.value)}
+            className="p-2 border border-gray-300 rounded w-full"
+          >
+            {availableNetworks.map((net) => (
+              <option key={net.name} value={net.name}>
+                {net.name} (IP: {net.ip})
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div className="mb-4">
           <h3 className="text-md font-semibold mb-2">Select Color Theme:</h3>
           <div className="flex space-x-2">
