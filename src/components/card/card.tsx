@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Modal, OptionModal } from '@/components';
 import { useStore } from '@/store/cardStore';
 import { v4 as uuidv4 } from 'uuid';
-
+import { useSnackbar } from 'notistack';
+import { showSnackbar } from '@/utils/toastUtils';
 interface CardProps {
   id: string;
   name?: string;
@@ -49,6 +50,8 @@ const getStatusColors = (status: string) => {
 };
 
 const Card = ({ data, selectedHostId }: CardDataProps) => {
+  const { enqueueSnackbar } = useSnackbar();
+
   const id = uuidv4();
   const { bg1, bg2 } = getStatusColors(data.status || 'primary');
   const [showOptions, setShowOptions] = useState(false);
@@ -81,6 +84,12 @@ const Card = ({ data, selectedHostId }: CardDataProps) => {
       };
       addContainerToHost(selectedHostId, newContainer);
     } else {
+      showSnackbar(
+        enqueueSnackbar,
+        '호스트를 선택해주세요.',
+        'error',
+        '#FF4853'
+      );
       console.log('호스트를 선택하세요');
     }
     setShowOptions(false);
