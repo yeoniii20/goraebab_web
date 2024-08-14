@@ -21,7 +21,6 @@ const HostCard = ({
   id,
   hostNm,
   ip,
-  status = true,
   isRemote,
   themeColor,
   className = '',
@@ -33,8 +32,6 @@ const HostCard = ({
   };
 
   const borderColor = selectedHostId === id ? themeColor.borderColor : 'grey';
-  const bgColor = themeColor.bgColor;
-  const textColor = themeColor.textColor;
 
   // 원격/로컬 구분에 따른 뱃지 스타일
   const badgeText = isRemote ? 'REMOTE' : 'LOCAL';
@@ -43,41 +40,45 @@ const HostCard = ({
   const badgeBorderColor = isRemote ? 'border-navy_2' : 'border-pink_2';
 
   return (
-    <div
-      onClick={handleClick}
-      className={`flex flex-col items-center p-[10px] border bg-white rounded-lg shadow-lg w-72 h-28 z-0 transform transition-transform duration-200 cursor-pointer ${className} ${
-        selectedHostId === id ? 'scale-102' : ''
-      }`}
-      style={{
-        borderColor: borderColor,
-        borderWidth: selectedHostId === id ? '2px' : '1px',
-      }}
-    >
+    <div className={`${className} ${selectedHostId === id ? 'scale-102' : ''}`}>
       <div
-        className={`flex items-center justify-center w-full space-x-2 rounded-md border-solid border-2 py-2 mb-3`}
+        className={`absolute text-xs font-semibold border-2 h-6 px-1 ml-5 rounded-t-lg content-center`}
         style={{
+          bottom: '110px',
           borderColor: `${themeColor.borderColor}`,
+          color: `${themeColor.textColor}`,
           backgroundColor: `${themeColor.bgColor}`,
         }}
       >
-        <FaHome
-          className={`w-4 h-4 `}
-          style={{ color: `${themeColor.textColor}` }}
-        />
-        <div
-          className={`text-sm font-semibold`}
-          style={{ color: `${themeColor.textColor}` }}
-        >
-          {hostNm || 'HOST'}
-        </div>
+        {badgeText}
       </div>
-      <div className="flex gap-2">
-        <div className="text-lg font-semibold">{`eth0 : ${ip}`}</div>
+      <div
+        onClick={handleClick}
+        className={`relative flex flex-col items-center p-[10px] border bg-white rounded-lg shadow-lg w-72 h-28 z-0 transform transition-transform duration-200 cursor-pointer `}
+        style={{
+          borderColor: borderColor,
+          borderWidth: selectedHostId === id ? '2px' : '1px',
+        }}
+      >
         <div
-          className={`px-2 py-1 text-xs font-bold rounded-full ${badgeBgColor} ${badgeTextColor} ${badgeBorderColor} border-2`}
+          className={`flex items-center justify-center w-full space-x-2 rounded-md border-solid border-2 py-2 mb-3`}
+          style={{
+            borderColor: `${themeColor.borderColor}`,
+            backgroundColor: `${themeColor.bgColor}`,
+          }}
         >
-          {badgeText}
+          <FaHome
+            className={`w-4 h-4 `}
+            style={{ color: `${themeColor.textColor}` }}
+          />
+          <div
+            className={`text-sm font-semibold`}
+            style={{ color: `${themeColor.textColor}` }}
+          >
+            {hostNm || 'HOST'}
+          </div>
         </div>
+        <div className="text-lg font-semibold">{`eth0 : ${ip}`}</div>
       </div>
     </div>
   );
