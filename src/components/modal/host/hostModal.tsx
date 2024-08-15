@@ -31,12 +31,15 @@ const HostModal = ({ onClose, onSave, availableNetworks }: HostModalProps) => {
   const [isRemote, setIsRemote] = useState<boolean>(false);
   const [hostNm, setHostNm] = useState<string>('');
   const [ip, setIp] = useState<string>('');
-  const [networkName, setNetworkName] = useState<string>(
-    availableNetworks[0]?.name || ''
-  );
-  const [networkIp, setNetworkIp] = useState<string>(
-    availableNetworks[0]?.ip || ''
-  );
+  // defualt network
+  const [networkName, setNetworkName] = useState<string>('docker0');
+  const [networkIp, setNetworkIp] = useState<string>('173.17.0.12');
+  // const [networkName, setNetworkName] = useState<string>(
+  //   availableNetworks[0]?.name || ''
+  // );
+  // const [networkIp, setNetworkIp] = useState<string>(
+  //   availableNetworks[0]?.ip || ''
+  // );
 
   // Initialize with the first color option as default
   const defaultColor = colorsOption.find((color) => !color.sub);
@@ -140,7 +143,7 @@ const HostModal = ({ onClose, onSave, availableNetworks }: HostModalProps) => {
             Remote
           </label>
         </div>
-
+        {/* 
         <div className="mb-4">
           <h3 className="text-md font-semibold mb-2">Select Network:</h3>
           <select
@@ -154,7 +157,7 @@ const HostModal = ({ onClose, onSave, availableNetworks }: HostModalProps) => {
               </option>
             ))}
           </select>
-        </div>
+        </div> */}
 
         <div className="mb-4">
           <h3 className="text-md font-semibold mb-2">Select Color Theme:</h3>
