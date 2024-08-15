@@ -38,7 +38,6 @@ const CardSection = ({
       <div className="flex">
         {hostData.map((host) => {
           const containers = allContainers[host.id] || []; // 해당 호스트의 컨테이너를 가져옴
-
           return (
             <div key={host.id} className="flex">
               <HostCard

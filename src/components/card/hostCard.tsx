@@ -36,16 +36,19 @@ const HostCard = ({
 
   // 원격/로컬 구분에 따른 뱃지 스타일
   const badgeText = isRemote ? 'REMOTE' : 'LOCAL';
-  const badgeBgColor = isRemote ? 'bg-navy_1' : 'bg-pink_1';
-  const badgeTextColor = isRemote ? 'text-navy_2' : 'text-pink_2';
-  const badgeBorderColor = isRemote ? 'border-navy_2' : 'border-pink_2';
 
   return (
-    <div className={`${className} ${selectedHostId === id ? 'scale-102' : ''}`}>
+    <div
+      className={`${className} relative transition-transform duration-200 ${
+        selectedHostId === id ? 'transform scale-105' : ''
+      }`}
+    >
       <div
-        className={`absolute text-xs font-semibold border-2 h-6 px-1 ml-5 rounded-t-lg content-center`}
+        className={`absolute text-xs font-semibold border-2 h-6 px-1 rounded-t-lg content-center`}
         style={{
-          bottom: '110px',
+          top: '-1.4rem', // 고정 위치 설정
+          left: '1.25rem',
+          zIndex: '10',
           borderColor: `${themeColor.borderColor}`,
           color: `${themeColor.textColor}`,
           backgroundColor: `${themeColor.bgColor}`,
@@ -55,7 +58,7 @@ const HostCard = ({
       </div>
       <div
         onClick={handleClick}
-        className={`relative flex flex-col items-center p-[10px] border bg-white rounded-lg shadow-lg w-72 h-28 z-0 transform transition-transform duration-200 cursor-pointer `}
+        className={`relative flex flex-col items-center p-[10px] border bg-white rounded-lg shadow-lg w-72 h-28 cursor-pointer`}
         style={{
           borderColor: borderColor,
           borderWidth: selectedHostId === id ? '2px' : '1px',
@@ -69,7 +72,7 @@ const HostCard = ({
           }}
         >
           <FaHome
-            className={`w-4 h-4 `}
+            className={`w-4 h-4`}
             style={{ color: `${themeColor.textColor}` }}
           />
           <div
