@@ -1,6 +1,7 @@
 import React from 'react';
 
 interface ContainerBarProps {
+  rotate?: number | 0;
   themeColor: {
     label: string;
     bgColor: string;
@@ -9,11 +10,15 @@ interface ContainerBarProps {
   };
 }
 
-const ConnectBar = ({ themeColor }: ContainerBarProps) => {
+const ConnectBar = ({ rotate, themeColor }: ContainerBarProps) => {
+  const rotationStyle = {
+    transform: `rotate(${rotate}deg)`,
+  };
+
   return (
-    <div className="flex items-start mt-5">
+    <div className={`flex items-start mt-0.5`} style={rotationStyle}>
       <div
-        className="h-6 brounded-br rounded-tr w-1"
+        className="h-6 rounded-br rounded-tr w-1"
         style={{ backgroundColor: `${themeColor.borderColor}` }}
       />
       <div
