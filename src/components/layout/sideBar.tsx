@@ -16,12 +16,10 @@ const Sidebar = ({ data, progress }: SidebarProps) => {
   const { selectedHostId } = selectedHostStore();
   const { activeId } = useMenuStore();
 
-  const [networkData, setNetworkData] = useState<any>(null);
-  console.log('networkData', networkData, '');
+  const [networkData, setNetworkData] = useState<any[]>([]); // Initialize as an array
 
   const handleCreateNetwork = (newNetwork: any) => {
-    console.log(newNetwork);
-    setNetworkData(newNetwork);
+    setNetworkData((prevNetworks) => [...prevNetworks, newNetwork]); // Append the new network to the existing array
   };
 
   return (
@@ -29,8 +27,14 @@ const Sidebar = ({ data, progress }: SidebarProps) => {
       <div className="flex-grow overflow-y-auto scrollbar-hide">
         {activeId === 3 ? (
           <>
-            {networkData ? (
-              <NetworkCard data={networkData} selectedHostId={selectedHostId} />
+            {networkData.length > 0 ? (
+              networkData.map((network, index) => (
+                <NetworkCard
+                  key={index}
+                  data={network}
+                  selectedHostId={selectedHostId}
+                />
+              ))
             ) : (
               <p>네트워크 데이터를 추가하세요</p>
             )}
@@ -45,7 +49,6 @@ const Sidebar = ({ data, progress }: SidebarProps) => {
       </div>
       <div className="flex-shrink-0">
         <ProgressBar progress={progress} />
-        {/* <Button title={'추가하기'} /> */}
         {activeId === 3 ? (
           <AddBridgeButton onCreate={handleCreateNetwork} />
         ) : (
