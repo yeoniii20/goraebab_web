@@ -4,27 +4,14 @@ import { HostCardProps } from './hostCard';
 import Draggable from 'react-draggable';
 import { useStore } from '@/store/cardStore';
 import { selectedHostStore } from '@/store/seletedHostStore';
-import { Container } from './cardContainer';
-
-interface CardContainerProps {
-  networkIp: string | undefined;
-  containers: Container[];
-}
 
 interface CardSectionProps {
   hostData: HostCardProps[];
-  containerData: CardContainerProps;
   isHandMode: boolean;
 }
 
-const CardSection = ({
-  hostData,
-  containerData,
-  isHandMode,
-}: CardSectionProps) => {
-  const { selectedHostId } = selectedHostStore(); // 선택된 호스트 ID를 가져옴
-
-  // Retrieve all containers at once, outside the map
+const CardSection = ({ hostData, isHandMode }: CardSectionProps) => {
+  const { selectedHostId, connectedBridgeIds } = selectedHostStore();
   const allContainers = useStore((state) => state.hostContainers);
 
   const handleHostClick = (id: string) => {
@@ -37,7 +24,9 @@ const CardSection = ({
     <Draggable disabled={!isHandMode}>
       <div className="flex">
         {hostData.map((host) => {
-          const containers = allContainers[host.id] || []; // 해당 호스트의 컨테이너를 가져옴
+          const containers = allContainers[host.id] || [];
+          const networks = connectedBridgeIds[host.id] || [];
+
           return (
             <div key={host.id} className="flex">
               <HostCard
@@ -54,11 +43,16 @@ const CardSection = ({
                 networkIp={host.networkIp}
               />
               <ConnectBar themeColor={host.themeColor} />
-              <CardContainer
-                networkIp={host.networkIp} // 네트워크 IP 전달
-                containers={containers} // 선택된 호스트의 컨테이너만 전달
-                themeColor={host.themeColor}
-              />
+              {networks.map((network) => (
+                <div key={network.id} className="flex flex-col">
+                  <CardContainer
+                    networkName={network.name}
+                    networkIp={network.gateway}
+                    containers={containers}
+                    themeColor={host.themeColor}
+                  />
+                </div>
+              ))}
             </div>
           );
         })}

@@ -8,6 +8,7 @@ export interface Container {
 }
 
 export interface CardContainerProps {
+  networkName: string;
   networkIp: string;
   containers: Container[]; // containers를 props로 전달받음
   themeColor: {
@@ -19,6 +20,7 @@ export interface CardContainerProps {
 }
 
 const CardContainer = ({
+  networkName,
   networkIp,
   containers,
   themeColor,
@@ -33,7 +35,7 @@ const CardContainer = ({
           color: `${themeColor.textColor}`,
         }}
       >
-        {`docker0 : ${networkIp}`} {/* 네트워크 IP 표시 */}
+        {`${networkName} : ${networkIp}`} {/* 네트워크 IP 표시 */}
       </div>
       {containers.length > 0 ? (
         <div className="w-full">
