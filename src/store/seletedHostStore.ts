@@ -22,10 +22,6 @@ interface HostStoreState {
   connectedBridgeIds: Record<string, NetworkInfo[]>; // 각 호스트에 대한 브릿지 연결 관리
   setSelectedHostId: (id: string | null) => void;
   addConnectedBridgeId: (hostId: string, network: NetworkInfo) => void;
-  addHostWithDefaultNetwork: (
-    hostId: string,
-    defaultNetwork: NetworkInfo
-  ) => void;
   removeConnectedBridgeId: (hostId: string, bridgeId: string) => void;
 }
 
@@ -53,11 +49,4 @@ export const selectedHostStore = create<HostStoreState>((set) => ({
       },
     })),
 
-  addHostWithDefaultNetwork: (hostId, defaultNetwork) =>
-    set((state) => ({
-      connectedBridgeIds: {
-        ...state.connectedBridgeIds,
-        [hostId]: [defaultNetwork], // 기본 네트워크 추가
-      },
-    })),
 }));

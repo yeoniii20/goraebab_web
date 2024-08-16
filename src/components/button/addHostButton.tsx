@@ -5,19 +5,21 @@ import HostModal from '../modal/host/hostModal';
 import { useHostStore } from '@/store/hostStore';
 import { useSnackbar } from 'notistack';
 import { showSnackbar } from '@/utils/toastUtils';
+import { selectedHostStore } from '@/store/seletedHostStore';
 
 const AddHostButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [availableNetworks, setAvailableNetworks] = useState<
-    { name: string; ip: string }[]
-  >([
+  const [availableNetworks] = useState<{ name: string; ip: string }[]>([
     { name: 'bridge', ip: '172.17.0.1' },
     { name: 'host', ip: '192.168.1.1' },
     { name: 'custom-network', ip: '10.0.0.1' },
-  ]); // 네트워크 상태 추가
+  ]);
 
   const { enqueueSnackbar } = useSnackbar();
   const addHost = useHostStore((state) => state.addHost);
+  const addConnectedBridgeId = selectedHostStore(
+    (state) => state.addConnectedBridgeId
+  );
 
   const handleAddHost = (
     id: string,
@@ -30,8 +32,8 @@ const AddHostButton = () => {
       borderColor: string;
       textColor: string;
     },
-    networkName: string, // 추가된 네트워크 정보
-    networkIp: string // 추가된 네트워크 IP
+    networkName: string,
+    networkIp: string
   ) => {
     const newHost = {
       id,
@@ -40,12 +42,26 @@ const AddHostButton = () => {
       status: true,
       isRemote,
       themeColor,
-      networkName, // 네트워크 이름 저장
-      networkIp, // 네트워크 IP 저장
+      networkName,
+      networkIp,
     };
 
-    // Zustand에 저장
+    const defaultNetwork = {
+      id: 'default-docker-network',
+      name: 'docker0',
+      subnet: '174.172.17.0/24',
+      gateway: '174.172.17.1',
+      networkIp: '174.172.17.1', // 이 필드는 필요에 따라 수정하세요.
+      driver: 'bridge',
+      connectedContainers: [],
+      status: 'active',
+    };
+
+    // Zustand에 호스트 저장
     addHost(newHost);
+
+    // 기본 네트워크를 호스트에 연결
+    addConnectedBridgeId(id, defaultNetwork);
 
     showSnackbar(
       enqueueSnackbar,
@@ -71,7 +87,7 @@ const AddHostButton = () => {
           <HostModal
             onClose={() => setIsModalOpen(false)}
             onSave={handleAddHost}
-            availableNetworks={availableNetworks} // 네트워크 목록 전달
+            availableNetworks={availableNetworks}
           />
         )}
       </div>
