@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Modal, OptionModal } from '@/components';
 import { useSnackbar } from 'notistack';
+import { showSnackbar } from '@/utils/toastUtils';
+import { selectedHostStore } from '@/store/seletedHostStore';
 
 interface NetworkProps {
   id: string;
@@ -41,7 +43,9 @@ const NetworkCard = ({ data, selectedHostId }: CardDataProps) => {
   const [showModal, setShowModal] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  console.log('data >>>', data);
+  const addConnectedBridgeId = selectedHostStore(
+    (state) => state.addConnectedBridgeId
+  );
 
   const networkItems = [
     { label: 'Name', value: data.name },
@@ -73,6 +77,22 @@ const NetworkCard = ({ data, selectedHostId }: CardDataProps) => {
 
   const handleCloseModal = () => {
     setShowModal(false);
+  };
+
+  const handleConnect = () => {
+    if (selectedHostId) {
+      addConnectedBridgeId(selectedHostId, data.id);
+      console.log('host를 선택했습니다');
+    } else {
+      showSnackbar(
+        enqueueSnackbar,
+        '호스트를 선택해주세요.',
+        'error',
+        '#FF4853'
+      );
+      console.log('호스트를 선택하세요');
+    }
+    setShowOptions(false);
   };
 
   useEffect(() => {
@@ -110,7 +130,7 @@ const NetworkCard = ({ data, selectedHostId }: CardDataProps) => {
             <div className="absolute top-4 left-16">
               <OptionModal
                 onTopHandler={() => console.log('정보 가져오기 클릭됨')}
-                onMiddleHandler={() => {}}
+                onMiddleHandler={handleConnect}
                 onBottomHandler={handleDelete}
               />
             </div>

@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 
 interface HostStoreState {
   selectedHostId: string | null;
@@ -11,7 +11,7 @@ interface HostStoreState {
 
 export const selectedHostStore = create<HostStoreState>((set) => ({
   selectedHostId: null,
-  connectedBridgeIds: {}, // 초기에는 빈 객체로 시작
+  connectedBridgeIds: {},
 
   setSelectedHostId: (id) => set({ selectedHostId: id }),
 
