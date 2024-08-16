@@ -12,7 +12,12 @@ interface NetworkProps {
   subnet: string;
   gateway: string;
   driver: string;
-  connectedContainers: { id: string; name: string; ip: string }[];
+  connectedContainers: {
+    id: string;
+    name: string;
+    ip: string;
+    status: string;
+  }[];
   status: string;
 }
 
@@ -81,8 +86,24 @@ const NetworkCard = ({ data, selectedHostId }: CardDataProps) => {
 
   const handleConnect = () => {
     if (selectedHostId) {
-      addConnectedBridgeId(selectedHostId, data.id);
-      console.log('host를 선택했습니다');
+      const networkInfo = {
+        id: data.id,
+        name: data.name,
+        subnet: data.subnet,
+        networkIp: data.gateway,
+        driver: data.driver,
+        connectedContainers: data.connectedContainers.map((container) => ({
+          id: container.id,
+          name: container.name,
+          ip: container.ip,
+          status: container.status,
+        })),
+        status: data.status,
+        gateway: data.gateway,
+      };
+
+      addConnectedBridgeId(selectedHostId, networkInfo);
+      console.log('Host selected and network connected');
     } else {
       showSnackbar(
         enqueueSnackbar,

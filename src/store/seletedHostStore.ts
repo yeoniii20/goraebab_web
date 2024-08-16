@@ -1,11 +1,31 @@
 import { create } from 'zustand';
 
+interface ContainerInfo {
+  id: string;
+  name: string;
+  ip: string;
+  status: string;
+}
+
+interface NetworkInfo {
+  gateway: string;
+  id: string;
+  name: string;
+  subnet: string;
+  networkIp: string;
+  driver: string;
+  connectedContainers: ContainerInfo[]; // 연결된 컨테이너 정보 추가
+}
+
 interface HostStoreState {
   selectedHostId: string | null;
-  connectedBridgeIds: Record<string, string[]>; // 각 호스트에 대한 브릿지 연결 관리
+  connectedBridgeIds: Record<string, NetworkInfo[]>; // 각 호스트에 대한 브릿지 연결 관리
   setSelectedHostId: (id: string | null) => void;
-  addConnectedBridgeId: (hostId: string, bridgeId: string) => void;
-  addHostWithDefaultNetwork: (hostId: string, defaultNetworkId: string) => void;
+  addConnectedBridgeId: (hostId: string, network: NetworkInfo) => void;
+  addHostWithDefaultNetwork: (
+    hostId: string,
+    defaultNetwork: NetworkInfo
+  ) => void;
   removeConnectedBridgeId: (hostId: string, bridgeId: string) => void;
 }
 
@@ -15,11 +35,11 @@ export const selectedHostStore = create<HostStoreState>((set) => ({
 
   setSelectedHostId: (id) => set({ selectedHostId: id }),
 
-  addConnectedBridgeId: (hostId, bridgeId) =>
+  addConnectedBridgeId: (hostId, network) =>
     set((state) => ({
       connectedBridgeIds: {
         ...state.connectedBridgeIds,
-        [hostId]: [...(state.connectedBridgeIds[hostId] || []), bridgeId],
+        [hostId]: [...(state.connectedBridgeIds[hostId] || []), network],
       },
     })),
 
@@ -28,16 +48,16 @@ export const selectedHostStore = create<HostStoreState>((set) => ({
       connectedBridgeIds: {
         ...state.connectedBridgeIds,
         [hostId]: (state.connectedBridgeIds[hostId] || []).filter(
-          (id) => id !== bridgeId
+          (network) => network.id !== bridgeId
         ),
       },
     })),
 
-  addHostWithDefaultNetwork: (hostId, defaultNetworkId) =>
+  addHostWithDefaultNetwork: (hostId, defaultNetwork) =>
     set((state) => ({
       connectedBridgeIds: {
         ...state.connectedBridgeIds,
-        [hostId]: [defaultNetworkId], // 기본 네트워크 추가
+        [hostId]: [defaultNetwork], // 기본 네트워크 추가
       },
     })),
 }));
