@@ -23,12 +23,7 @@ const ContainerPage = () => {
     <TransformProvider>
       {hosts.length > 0 &&
         hosts.map((host, index) => (
-          <CardSection
-            key={index}
-            hostData={[host]}
-            containerData={NETWORK_DATA}
-            isHandMode={isHandMode}
-          />
+          <CardSection key={index} hostData={[host]} isHandMode={isHandMode} />
         ))}
     </TransformProvider>
   );
