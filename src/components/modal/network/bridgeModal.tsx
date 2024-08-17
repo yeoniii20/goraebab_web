@@ -5,13 +5,20 @@ import { v4 as uuidv4 } from 'uuid';
 
 interface BridgeModalProps {
   onClose: () => void;
-  onCreate: (id: string, name: string, subnet: string, gateway: string) => void;
+  onCreate: (
+    id: string,
+    name: string,
+    subnet: string,
+    gateway: string,
+    driver: string
+  ) => void;
 }
 
 const BridgeModal = ({ onClose, onCreate }: BridgeModalProps) => {
   const [name, setName] = useState<string>('');
   const [subnet, setSubnet] = useState<string>('192.168.1.0/24');
   const [gateway, setGateway] = useState<string>('192.168.1.1');
+  const [driver, setDriver] = useState<string>('bridge');
   const { enqueueSnackbar } = useSnackbar();
 
   const handleCreate = () => {
@@ -46,7 +53,7 @@ const BridgeModal = ({ onClose, onCreate }: BridgeModalProps) => {
     }
 
     const id = uuidv4(); // 네트워크 ID 생성
-    onCreate(id, name, subnet, gateway); // 사용자 입력한 이름을 전달
+    onCreate(id, name, subnet, gateway, driver);
     onClose();
   };
 
@@ -73,8 +80,18 @@ const BridgeModal = ({ onClose, onCreate }: BridgeModalProps) => {
           placeholder="Gateway (e.g., 192.168.1.1)"
           value={gateway}
           onChange={(e) => setGateway(e.target.value)}
-          className="mb-4 p-2 border border-gray-300 rounded w-full"
+          className="mb-2 p-2 border border-gray-300 rounded w-full"
         />
+        <select
+          value={driver}
+          onChange={(e) => setDriver(e.target.value)}
+          className="mb-8 p-2 border border-gray-300 rounded w-full"
+        >
+          {/* 드라이버 옵션 */}
+          <option value="bridge">Bridge</option>
+          <option value="host">Host</option>
+          <option value="overlay">Overlay</option>
+        </select>
         <div className="flex justify-end space-x-2">
           <button
             onClick={onClose}

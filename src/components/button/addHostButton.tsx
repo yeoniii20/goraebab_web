@@ -51,7 +51,7 @@ const AddHostButton = () => {
       name: 'docker0',
       subnet: '174.172.17.0/24',
       gateway: '174.172.17.1',
-      networkIp: '174.172.17.1', // 이 필드는 필요에 따라 수정하세요.
+      networkIp: '174.172.17.1',
       driver: 'bridge',
       connectedContainers: [],
       status: 'active',

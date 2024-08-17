@@ -13,7 +13,7 @@ const ContainerPage = () => {
 
   // Zustand에서 hosts 데이터를 가져옵니다.
   const hosts = useHostStore((state) => state.hosts);
-
+ 
   // 상태가 변경될 때 실행할 로직을 정의합니다.
   useHandModeSubscription((newIsHandMode) => {
     setIsHandMode(newIsHandMode);
