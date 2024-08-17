@@ -14,9 +14,10 @@ const AddBridgeButton = ({ onCreate }: AddBridgeButtonProps) => {
 
   const handleCreateBridge = (
     id: string,
-    name: string, // 사용자가 입력한 값
+    name: string,
     subnet: string,
-    gateway: string
+    gateway: string,
+    driver: string
   ) => {
     // 생성된 네트워크 데이터 형식 맞추기
     const newNetworkData = {
@@ -24,7 +25,7 @@ const AddBridgeButton = ({ onCreate }: AddBridgeButtonProps) => {
       name, // 사용자가 입력한 네트워크 이름을 그대로 사용
       subnet,
       gateway,
-      driver: 'bridge', // 드라이버를 bridge로 설정
+      driver,
       connectedContainers: [],
       status: 'active', // 네트워크 상태를 active로 설정 (필요에 따라 수정)
     };
