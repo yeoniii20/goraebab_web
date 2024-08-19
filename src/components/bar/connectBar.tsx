@@ -2,6 +2,7 @@ import React from 'react';
 
 interface ContainerBarProps {
   rotate?: number | 0;
+  length?: string;
   themeColor: {
     label: string;
     bgColor: string;
@@ -10,7 +11,7 @@ interface ContainerBarProps {
   };
 }
 
-const ConnectBar = ({ rotate, themeColor }: ContainerBarProps) => {
+const ConnectBar = ({ rotate, length, themeColor }: ContainerBarProps) => {
   const rotationStyle = {
     transform: `rotate(${rotate}deg)`,
   };
@@ -22,8 +23,12 @@ const ConnectBar = ({ rotate, themeColor }: ContainerBarProps) => {
         style={{ backgroundColor: `${themeColor.borderColor}` }}
       />
       <div
-        className="w-6 h-[1px] mt-3"
-        style={{ backgroundColor: `${themeColor.borderColor}` }}
+        className="h-[1px] mt-3"
+        style={{
+          backgroundColor: `${themeColor.borderColor}`,
+          width: `${length}` === 'long' ? '72px' : '24px',
+          marginRight: `${length}` === 'long' ? '53px' : '0px',
+        }}
       />
     </div>
   );
