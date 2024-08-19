@@ -4,6 +4,7 @@ import { HostCardProps } from './hostCard';
 import Draggable from 'react-draggable';
 import { useStore } from '@/store/cardStore';
 import { selectedHostStore } from '@/store/seletedHostStore';
+import { useHostStore } from '@/store/hostStore';
 
 interface CardSectionProps {
   hostData: HostCardProps[];
@@ -11,15 +12,21 @@ interface CardSectionProps {
 }
 
 const CardSection = ({ hostData, isHandMode }: CardSectionProps) => {
-  const { selectedHostId, connectedBridgeIds } = selectedHostStore();
+  const { selectedHostId, connectedBridgeIds, deleteConnectedBridgeId } =
+    selectedHostStore();
   const allContainers = useStore((state) => state.hostContainers);
-
-  console.log('연결된 브릿지 ::', connectedBridgeIds);
+  const deleteNetwork = useHostStore((state) => state.deleteNetwork);
 
   const handleHostClick = (id: string) => {
     selectedHostStore.setState({
       selectedHostId: selectedHostId === id ? null : id,
     });
+  };
+
+  const handleDeleteNetwork = (hostId: string, networkName: string) => {
+    deleteNetwork(hostId, networkName);
+    // connectedBridgeIds 업데이트
+    deleteConnectedBridgeId(hostId, networkName);
   };
 
   return (
@@ -36,12 +43,22 @@ const CardSection = ({ hostData, isHandMode }: CardSectionProps) => {
         {hostData.map((host) => {
           const containers = allContainers[host.id] || [];
           const networks = connectedBridgeIds[host.id] || [];
+
           return (
             <div key={host.id} className="flex flex-col items-center">
               <div className="flex flex-row items-center">
                 {/* 좌측에 위치할 네트워크 */}
                 {networks.length > 0 && (
                   <div className="flex items-center">
+                    {/* 네트워크 삭제 버튼 */}
+                    <button
+                      onClick={() =>
+                        handleDeleteNetwork(host.id, networks[0].name)
+                      }
+                      className="text-red-600 ml-2"
+                    >
+                      삭제
+                    </button>
                     <CardContainer
                       networkName={networks[0].name}
                       networkIp={networks[0].gateway}
@@ -79,6 +96,15 @@ const CardSection = ({ hostData, isHandMode }: CardSectionProps) => {
                       containers={containers}
                       themeColor={host.themeColor}
                     />
+                    {/* 네트워크 삭제 버튼 */}
+                    <button
+                      onClick={() =>
+                        handleDeleteNetwork(host.id, networks[1].name)
+                      }
+                      className="text-red-600 ml-2"
+                    >
+                      삭제
+                    </button>
                   </div>
                 )}
               </div>
@@ -96,6 +122,15 @@ const CardSection = ({ hostData, isHandMode }: CardSectionProps) => {
                     containers={containers}
                     themeColor={host.themeColor}
                   />
+                  {/* 네트워크 삭제 버튼 */}
+                  <button
+                    onClick={() =>
+                      handleDeleteNetwork(host.id, networks[2].name)
+                    }
+                    className="text-red-600 mt-2"
+                  >
+                    삭제
+                  </button>
                 </div>
               )}
             </div>
