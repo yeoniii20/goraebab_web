@@ -50,20 +50,14 @@ const CardSection = ({ hostData, isHandMode }: CardSectionProps) => {
                 {/* 좌측에 위치할 네트워크 */}
                 {networks.length > 0 && (
                   <div className="flex items-center">
-                    {/* 네트워크 삭제 버튼 */}
-                    <button
-                      onClick={() =>
-                        handleDeleteNetwork(host.id, networks[0].name)
-                      }
-                      className="text-red-600 ml-2"
-                    >
-                      삭제
-                    </button>
                     <CardContainer
                       networkName={networks[0].name}
                       networkIp={networks[0].gateway}
                       containers={containers}
                       themeColor={host.themeColor}
+                      onDelete={() =>
+                        handleDeleteNetwork(host.id, networks[0].name)
+                      }
                     />
                     <ConnectBar rotate={180} themeColor={host.themeColor} />
                   </div>
@@ -95,16 +89,10 @@ const CardSection = ({ hostData, isHandMode }: CardSectionProps) => {
                       networkIp={networks[1].gateway}
                       containers={containers}
                       themeColor={host.themeColor}
-                    />
-                    {/* 네트워크 삭제 버튼 */}
-                    <button
-                      onClick={() =>
+                      onDelete={() =>
                         handleDeleteNetwork(host.id, networks[1].name)
                       }
-                      className="text-red-600 ml-2"
-                    >
-                      삭제
-                    </button>
+                    />
                   </div>
                 )}
               </div>
@@ -121,16 +109,10 @@ const CardSection = ({ hostData, isHandMode }: CardSectionProps) => {
                     networkIp={networks[2].gateway}
                     containers={containers}
                     themeColor={host.themeColor}
-                  />
-                  {/* 네트워크 삭제 버튼 */}
-                  <button
-                    onClick={() =>
+                    onDelete={() =>
                       handleDeleteNetwork(host.id, networks[2].name)
                     }
-                    className="text-red-600 mt-2"
-                  >
-                    삭제
-                  </button>
+                  />
                 </div>
               )}
             </div>
