@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { FaFolderOpen, FaDocker, FaTag, FaFileSignature } from 'react-icons/fa';
 import { useSnackbar } from 'notistack';
@@ -12,8 +14,10 @@ interface ModalProps {
     id: string,
     name: string,
     tags: string,
-    file: File,
-    size: string
+    file: File | null,
+    size: string,
+    source: 'local' | 'dockerHub',
+    dockerImageInfo?: any
   ) => void;
 }
 
@@ -60,7 +64,7 @@ const ImageModal = ({ isOpen, onClose, onSave }: ModalProps) => {
 
   // 유효성 검사
   const validateInputs = () => {
-    if (!file) {
+    if (!file && activeTab === 'local') {
       showSnackbar(
         enqueueSnackbar,
         '이미지를 선택해주세요.',
@@ -83,22 +87,14 @@ const ImageModal = ({ isOpen, onClose, onSave }: ModalProps) => {
   const handleSave = () => {
     if (validateInputs()) {
       const id = uuidv4();
-      if (file) {
-        onSave(id, name, tags, file, size);
+      if (activeTab === 'local' && file) {
+        onSave(id, name, tags, file, size, 'local');
+      } else if (activeTab === 'docker') {
+        // Docker Hub 이미지 데이터 전달
+        const dockerImageInfo = {}; // Docker Hub에서 선택한 이미지 정보
+        onSave(id, name, tags, null, size, 'dockerHub', dockerImageInfo);
       }
       onClose();
-      // 값 초기화
-      setActiveTab('local');
-      setName('');
-      setTags('');
-      setSize('');
-      // 성공 토스트 메시지
-      showSnackbar(
-        enqueueSnackbar,
-        `${file?.name}을 저장했습니다`,
-        'success',
-        '#4C48FF'
-      );
     }
   };
 
