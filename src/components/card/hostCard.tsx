@@ -1,5 +1,5 @@
+import { useHostStore } from '@/store/hostStore';
 import { selectedHostStore } from '@/store/seletedHostStore';
-import { FaHome } from 'react-icons/fa';
 
 export type HostCardProps = {
   id: string;
@@ -17,6 +17,7 @@ export type HostCardProps = {
   onClick?: () => void;
   className?: string;
 };
+import { FaTrash, FaTimesCircle, FaHome } from 'react-icons/fa';
 
 const HostCard = ({
   id,
@@ -27,14 +28,22 @@ const HostCard = ({
   className = '',
 }: HostCardProps) => {
   const { selectedHostId, setSelectedHostId } = selectedHostStore();
+  const deleteHost = useHostStore((state) => state.deleteHost);
+  const deleteNetwork = useHostStore((state) => state.deleteNetwork);
+
+  const handleDeleteHost = () => {
+    deleteHost(id);
+  };
+
+  const handleDeleteNetwork = () => {
+    deleteNetwork(id, hostNm || 'docker0');
+  };
 
   const handleClick = () => {
     setSelectedHostId(selectedHostId === id ? null : id);
   };
 
   const borderColor = selectedHostId === id ? themeColor.borderColor : 'grey';
-
-  // 원격/로컬 구분에 따른 뱃지 스타일
   const badgeText = isRemote ? 'REMOTE' : 'LOCAL';
 
   return (
@@ -46,7 +55,7 @@ const HostCard = ({
       <div
         className={`absolute text-xs font-semibold border-2 h-6 px-1 rounded-t-lg content-center`}
         style={{
-          top: '-1.4rem', // 고정 위치 설정
+          top: '-1.4rem',
           left: '1.25rem',
           zIndex: '10',
           borderColor: `${themeColor.borderColor}`,
@@ -84,6 +93,22 @@ const HostCard = ({
         </div>
         <div className="text-lg font-semibold">{`eth0 : ${ip}`}</div>
       </div>
+
+      {/* 호스트 삭제 버튼 */}
+      <button
+        onClick={handleDeleteHost}
+        className="absolute top-0 right-0 text-red-600"
+      >
+        <FaTrash />
+      </button>
+
+      {/* 네트워크 삭제 버튼 */}
+      <button
+        onClick={handleDeleteNetwork}
+        className="absolute bottom-0 right-0 text-red-600"
+      >
+        <FaTimesCircle />
+      </button>
     </div>
   );
 };
