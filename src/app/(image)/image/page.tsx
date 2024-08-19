@@ -43,29 +43,7 @@ const ImagePage = () => {
   };
   const { selectedHostId } = selectedHostStore();
 
-  return (
-    <SnackbarProvider maxSnack={3}>
-      <div className="min-h-screen flex items-center justify-center flex-col">
-        <button
-          onClick={openModal}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-        >
-          Open Modal
-        </button>
-        <p className="mt-2">Example::: 모달에서 입력한 정보를 카드에 보여줌</p>
-        <div className="mt-4 max-w-4xl">
-          {cards.map((item, index) => (
-            <Card key={index} data={item} selectedHostId={selectedHostId} />
-          ))}
-        </div>
-        <ImageModal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          onSave={handleSave}
-        />
-      </div>
-    </SnackbarProvider>
-  );
+  return <></>;
 };
 
 export default ImagePage;
