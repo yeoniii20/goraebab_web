@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useRef, useState } from 'react';
+import React, { createContext, useRef, useState } from 'react';
 import {
   TransformWrapper,
   TransformComponent,
@@ -26,6 +26,22 @@ export const TransformProvider: React.FC<{ children: React.ReactNode }> = ({
     console.log(`Zoom changed to ${scale}`);
   };
 
+  const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+    if (!event.ctrlKey) {
+      event.preventDefault();
+    } else {
+      // ctrl 키가 눌려 있으면 zoom 기능을 트리거하도록 합니다.
+      if (transformWrapperRef.current) {
+        const { zoomIn, zoomOut } = transformWrapperRef.current;
+        if (event.deltaY < 0) {
+          zoomIn();
+        } else {
+          zoomOut();
+        }
+      }
+    }
+  };
+
   return (
     <TransformContext.Provider
       value={{
@@ -37,7 +53,10 @@ export const TransformProvider: React.FC<{ children: React.ReactNode }> = ({
     >
       <TransformWrapper
         ref={transformWrapperRef}
-        wheel={{ step: 0.1 }}
+        wheel={{
+          step: 0.1,
+          wheelDisabled: true, // 기본 휠 줌 비활성화
+        }}
         doubleClick={{ mode: 'reset' }}
         initialScale={1}
         maxScale={3}
@@ -46,26 +65,24 @@ export const TransformProvider: React.FC<{ children: React.ReactNode }> = ({
         panning={{ disabled: !isPanning }}
         onZoomStop={(ref) => handleZoomChange(ref.state.scale)}
       >
-        <TransformComponent
-          wrapperStyle={{
+        <div
+          onWheel={(event) => handleWheel(event)}
+          style={{
             width: '100vw',
             height: '100vh',
             position: 'relative',
           }}
         >
-          {children}
-        </TransformComponent>
+          <TransformComponent
+            wrapperStyle={{
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            {children}
+          </TransformComponent>
+        </div>
       </TransformWrapper>
     </TransformContext.Provider>
   );
-};
-
-export const useTransformContext = () => {
-  const context = useContext(TransformContext);
-  if (!context) {
-    throw new Error(
-      'useTransformContext must be used within a TransformProvider'
-    );
-  }
-  return context;
 };
