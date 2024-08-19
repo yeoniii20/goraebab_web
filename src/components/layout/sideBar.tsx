@@ -6,8 +6,9 @@ import { selectedHostStore } from '@/store/seletedHostStore';
 import AddBridgeButton from '../button/addBridgeButton';
 import NetworkCard from '../card/networkCard';
 import VolumeCard from '../card/volumeCard';
-import { useMenuStore } from '@/store/store';
 import AddVolumeButton from '../button/addVolumeButton';
+import AddContainerButton from '../button/addContainerButton';
+import { useMenuStore } from '@/store/store';
 
 interface SidebarProps {
   data: any[];
@@ -20,6 +21,7 @@ const Sidebar = ({ data, progress }: SidebarProps) => {
 
   const [networkData, setNetworkData] = useState<any[]>([]);
   const [volumeData, setVolumeData] = useState<any[]>([]);
+  const [containerData, setContainerData] = useState<any[]>([]);
 
   const handleCreateNetwork = (newNetwork: any) => {
     setNetworkData((prevNetworks) => [...prevNetworks, newNetwork]);
@@ -29,10 +31,28 @@ const Sidebar = ({ data, progress }: SidebarProps) => {
     setVolumeData((prevVolumes) => [...prevVolumes, newVolume]);
   };
 
+  const handleCreateContainer = (newContainer: any) => {
+    setContainerData((prevContainers) => [...prevContainers, newContainer]); // 새로운 컨테이너 추가
+  };
+
   return (
     <div className="fixed top-0 left-0 w-[300px] h-full flex flex-col bg-white p-4 border-r-2 border-grey_2 pt-20">
       <div className="flex-grow overflow-y-auto scrollbar-hide">
-        {activeId === 3 ? (
+        {activeId === 1 ? (
+          <>
+            {containerData.length > 0 ? (
+              containerData.map((container, index) => (
+                <Card
+                  key={index}
+                  data={container}
+                  selectedHostId={selectedHostId}
+                />
+              ))
+            ) : (
+              <p>컨테이너를 추가하세요</p>
+            )}
+          </>
+        ) : activeId === 3 ? (
           <>
             {networkData.length > 0 ? (
               networkData.map((network, index) => (
@@ -70,7 +90,9 @@ const Sidebar = ({ data, progress }: SidebarProps) => {
       </div>
       <div className="flex-shrink-0">
         <ProgressBar progress={progress} />
-        {activeId === 3 ? (
+        {activeId === 1 ? (
+          <AddContainerButton onCreate={handleCreateContainer} /> 
+        ) : activeId === 3 ? (
           <AddBridgeButton onCreate={handleCreateNetwork} />
         ) : activeId === 4 ? (
           <AddVolumeButton onCreate={handleCreateVolume} />
