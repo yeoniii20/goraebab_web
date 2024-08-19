@@ -35,7 +35,8 @@ const CardContainer = ({
           color: `${themeColor.textColor}`,
         }}
       >
-        {`${networkName} : ${networkIp}`} {/* 네트워크 IP 표시 */}
+        {/* 네트워크 IP 표시 */}
+        {`${networkName} : ${networkIp}`}
       </div>
       {containers.length > 0 ? (
         <div className="w-full max-h-36 scrollbar-hide overflow-y-auto">
