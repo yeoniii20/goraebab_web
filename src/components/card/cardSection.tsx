@@ -78,7 +78,11 @@ const CardSection = ({ hostData, isHandMode }: CardSectionProps) => {
               {/* 아래쪽에 위치할 네트워크 */}
               {networks.length > 2 && (
                 <div className="flex flex-col items-center">
-                  <ConnectBar rotate={90} themeColor={host.themeColor} />
+                  <ConnectBar
+                    rotate={90}
+                    themeColor={host.themeColor}
+                    length={'long'}
+                  />
                   <CardContainer
                     networkName={networks[2].name}
                     networkIp={networks[2].gateway}
