@@ -5,7 +5,9 @@ import { Button, Card, ProgressBar } from '@/components';
 import { selectedHostStore } from '@/store/seletedHostStore';
 import AddBridgeButton from '../button/addBridgeButton';
 import NetworkCard from '../card/networkCard';
+import VolumeCard from '../card/volumeCard';
 import { useMenuStore } from '@/store/store';
+import AddVolumeButton from '../button/addVolumeButton';
 
 interface SidebarProps {
   data: any[];
@@ -16,10 +18,15 @@ const Sidebar = ({ data, progress }: SidebarProps) => {
   const { selectedHostId } = selectedHostStore();
   const { activeId } = useMenuStore();
 
-  const [networkData, setNetworkData] = useState<any[]>([]); // Initialize as an array
+  const [networkData, setNetworkData] = useState<any[]>([]);
+  const [volumeData, setVolumeData] = useState<any[]>([]);
 
   const handleCreateNetwork = (newNetwork: any) => {
-    setNetworkData((prevNetworks) => [...prevNetworks, newNetwork]); // Append the new network to the existing array
+    setNetworkData((prevNetworks) => [...prevNetworks, newNetwork]);
+  };
+
+  const handleCreateVolume = (newVolume: any) => {
+    setVolumeData((prevVolumes) => [...prevVolumes, newVolume]);
   };
 
   return (
@@ -39,6 +46,20 @@ const Sidebar = ({ data, progress }: SidebarProps) => {
               <p>네트워크 데이터를 추가하세요</p>
             )}
           </>
+        ) : activeId === 4 ? (
+          <>
+            {volumeData.length > 0 ? (
+              volumeData.map((volume, index) => (
+                <VolumeCard
+                  key={index}
+                  data={volume}
+                  selectedHostId={selectedHostId}
+                />
+              ))
+            ) : (
+              <p>볼륨 데이터를 추가하세요</p>
+            )}
+          </>
         ) : (
           <>
             {data.map((item, index) => (
@@ -51,6 +72,8 @@ const Sidebar = ({ data, progress }: SidebarProps) => {
         <ProgressBar progress={progress} />
         {activeId === 3 ? (
           <AddBridgeButton onCreate={handleCreateNetwork} />
+        ) : activeId === 4 ? (
+          <AddVolumeButton onCreate={handleCreateVolume} />
         ) : (
           <Button title={'추가하기'} />
         )}
