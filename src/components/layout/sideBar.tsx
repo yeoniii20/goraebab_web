@@ -8,6 +8,7 @@ import NetworkCard from '../card/networkCard';
 import VolumeCard from '../card/volumeCard';
 import AddVolumeButton from '../button/addVolumeButton';
 import AddContainerButton from '../button/addContainerButton';
+import AddImageButton from '../button/addImageButton';
 import { useMenuStore } from '@/store/store';
 
 interface SidebarProps {
@@ -22,6 +23,7 @@ const Sidebar = ({ data, progress }: SidebarProps) => {
   const [networkData, setNetworkData] = useState<any[]>([]);
   const [volumeData, setVolumeData] = useState<any[]>([]);
   const [containerData, setContainerData] = useState<any[]>([]);
+  const [imageData, setImageData] = useState<any[]>([]);
 
   const handleCreateNetwork = (newNetwork: any) => {
     setNetworkData((prevNetworks) => [...prevNetworks, newNetwork]);
@@ -32,7 +34,11 @@ const Sidebar = ({ data, progress }: SidebarProps) => {
   };
 
   const handleCreateContainer = (newContainer: any) => {
-    setContainerData((prevContainers) => [...prevContainers, newContainer]); // 새로운 컨테이너 추가
+    setContainerData((prevContainers) => [...prevContainers, newContainer]);
+  };
+
+  const handleCreateImage = (newImage: any) => {
+    setImageData((prevImages) => [...prevImages, newImage]);
   };
 
   return (
@@ -50,6 +56,20 @@ const Sidebar = ({ data, progress }: SidebarProps) => {
               ))
             ) : (
               <p>컨테이너를 추가하세요</p>
+            )}
+          </>
+        ) : activeId === 2 ? (
+          <>
+            {imageData.length > 0 ? (
+              imageData.map((image, index) => (
+                <Card
+                  key={index}
+                  data={image}
+                  selectedHostId={selectedHostId}
+                />
+              ))
+            ) : (
+              <p>이미지를 추가하세요</p>
             )}
           </>
         ) : activeId === 3 ? (
@@ -91,7 +111,9 @@ const Sidebar = ({ data, progress }: SidebarProps) => {
       <div className="flex-shrink-0">
         <ProgressBar progress={progress} />
         {activeId === 1 ? (
-          <AddContainerButton onCreate={handleCreateContainer} /> 
+          <AddContainerButton onCreate={handleCreateContainer} />
+        ) : activeId === 2 ? (
+          <AddImageButton onCreate={handleCreateImage} />
         ) : activeId === 3 ? (
           <AddBridgeButton onCreate={handleCreateNetwork} />
         ) : activeId === 4 ? (
