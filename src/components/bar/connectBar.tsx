@@ -27,7 +27,7 @@ const ConnectBar = ({ rotate, length, themeColor }: ContainerBarProps) => {
         style={{
           backgroundColor: `${themeColor.borderColor}`,
           width: `${length}` === 'long' ? '72px' : '24px',
-          marginRight: `${length}` === 'long' ? '53px' : '0px',
+          marginRight: `${length}` === 'long' ? '55px' : '0px',
         }}
       />
     </div>
