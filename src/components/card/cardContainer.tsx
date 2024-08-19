@@ -10,7 +10,7 @@ export interface Container {
 export interface CardContainerProps {
   networkName: string;
   networkIp: string;
-  containers: Container[]; // containers를 props로 전달받음
+  containers: Container[];
   themeColor: {
     label: string;
     bgColor: string;
@@ -38,7 +38,7 @@ const CardContainer = ({
         {`${networkName} : ${networkIp}`} {/* 네트워크 IP 표시 */}
       </div>
       {containers.length > 0 ? (
-        <div className="w-full">
+        <div className="w-full max-h-36 scrollbar-hide overflow-y-auto">
           {containers.map((container, index) => (
             <div
               key={index}
