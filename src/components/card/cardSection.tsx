@@ -24,11 +24,18 @@ const CardSection = ({ hostData, isHandMode }: CardSectionProps) => {
 
   return (
     <Draggable disabled={!isHandMode}>
-      <div className="flex flex-col items-center">
+      <div
+        className="flex flex-col items-center"
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}
+      >
         {hostData.map((host) => {
           const containers = allContainers[host.id] || [];
           const networks = connectedBridgeIds[host.id] || [];
-
           return (
             <div key={host.id} className="flex flex-col items-center">
               <div className="flex flex-row items-center">
