@@ -1,52 +1,46 @@
 import { create } from 'zustand';
 
-interface ContainerInfo {
-  id: string;
-  name: string;
-  ip: string;
-  status: string;
-}
-
-interface NetworkInfo {
-  gateway: string;
-  id: string;
-  name: string;
-  subnet: string;
-  networkIp: string;
-  driver: string;
-  connectedContainers: ContainerInfo[]; // 연결된 컨테이너 정보 추가
-}
-
-interface HostStoreState {
+interface SelectedHostStore {
   selectedHostId: string | null;
-  connectedBridgeIds: Record<string, NetworkInfo[]>; // 각 호스트에 대한 브릿지 연결 관리
+  connectedBridgeIds: { [key: string]: { name: string; gateway: string }[] };
   setSelectedHostId: (id: string | null) => void;
-  addConnectedBridgeId: (hostId: string, network: NetworkInfo) => void;
-  removeConnectedBridgeId: (hostId: string, bridgeId: string) => void;
+  addConnectedBridgeId: (
+    hostId: string,
+    bridge: { name: string; gateway: string }
+  ) => void;
+  deleteConnectedBridgeId: (hostId: string, networkName: string) => void;
 }
 
-export const selectedHostStore = create<HostStoreState>((set) => ({
+export const selectedHostStore = create<SelectedHostStore>((set) => ({
   selectedHostId: null,
   connectedBridgeIds: {},
 
-  setSelectedHostId: (id) => set({ selectedHostId: id }),
+  // 선택한 호스트 아이디
+  setSelectedHostId: (id) =>
+    set((state) => ({
+      selectedHostId: id,
+    })),
 
-  addConnectedBridgeId: (hostId, network) =>
+  // 브릿지 연결
+  addConnectedBridgeId: (hostId, bridge) =>
     set((state) => ({
       connectedBridgeIds: {
         ...state.connectedBridgeIds,
-        [hostId]: [...(state.connectedBridgeIds[hostId] || []), network],
+        [hostId]: [...(state.connectedBridgeIds[hostId] || []), bridge],
       },
     })),
 
-  removeConnectedBridgeId: (hostId, bridgeId) =>
-    set((state) => ({
-      connectedBridgeIds: {
-        ...state.connectedBridgeIds,
-        [hostId]: (state.connectedBridgeIds[hostId] || []).filter(
-          (network) => network.id !== bridgeId
-        ),
-      },
-    })),
-
+  // 연결된 브릿지 삭제
+  deleteConnectedBridgeId: (hostId, networkName) =>
+    set((state) => {
+      const updatedBridges = (state.connectedBridgeIds[hostId] || []).filter(
+        (bridge) => bridge.name !== networkName
+      );
+      return {
+        connectedBridgeIds: {
+          ...state.connectedBridgeIds,
+          [hostId]: updatedBridges,
+        },
+      };
+    }),
 }));
