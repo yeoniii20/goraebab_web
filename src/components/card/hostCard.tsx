@@ -1,5 +1,6 @@
 import { useHostStore } from '@/store/hostStore';
 import { selectedHostStore } from '@/store/seletedHostStore';
+import { FaTrash, FaHome } from 'react-icons/fa';
 
 export type HostCardProps = {
   id: string;
@@ -17,7 +18,6 @@ export type HostCardProps = {
   onClick?: () => void;
   className?: string;
 };
-import { FaTrash, FaTimesCircle, FaHome } from 'react-icons/fa';
 
 const HostCard = ({
   id,
@@ -29,14 +29,9 @@ const HostCard = ({
 }: HostCardProps) => {
   const { selectedHostId, setSelectedHostId } = selectedHostStore();
   const deleteHost = useHostStore((state) => state.deleteHost);
-  const deleteNetwork = useHostStore((state) => state.deleteNetwork);
 
   const handleDeleteHost = () => {
     deleteHost(id);
-  };
-
-  const handleDeleteNetwork = () => {
-    deleteNetwork(id, hostNm || 'docker0');
   };
 
   const handleClick = () => {
@@ -73,6 +68,15 @@ const HostCard = ({
           borderWidth: selectedHostId === id ? '2px' : '1px',
         }}
       >
+        {/* 호스트 삭제 버튼 (호스트가 선택된 경우에만 버튼 표시) */}
+        {selectedHostId === id && (
+          <button
+            onClick={handleDeleteHost}
+            className="absolute top-4 right-4 p-1.5 rounded-full  text-grey_5 hover:bg-grey_0 bg-white hover:text-white transition-colors duration-200"
+          >
+            <FaTrash className="w-4 h-4" style={{ color: borderColor }} />
+          </button>
+        )}
         <div
           className={`flex items-center justify-center w-full space-x-2 rounded-md border-solid border-2 py-2 mb-3`}
           style={{
@@ -93,22 +97,6 @@ const HostCard = ({
         </div>
         <div className="text-lg font-semibold">{`eth0 : ${ip}`}</div>
       </div>
-
-      {/* 호스트 삭제 버튼 */}
-      <button
-        onClick={handleDeleteHost}
-        className="absolute top-0 right-0 text-red-600"
-      >
-        <FaTrash />
-      </button>
-
-      {/* 네트워크 삭제 버튼 */}
-      <button
-        onClick={handleDeleteNetwork}
-        className="absolute bottom-0 right-0 text-red-600"
-      >
-        <FaTimesCircle />
-      </button>
     </div>
   );
 };
