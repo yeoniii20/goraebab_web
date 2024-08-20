@@ -5,6 +5,7 @@ import { useSnackbar } from 'notistack';
 import VolumeModal from '../modal/volume/volumeModal';
 import { v4 as uuidv4 } from 'uuid';
 import { showSnackbar } from '@/utils/toastUtils';
+import { useVolumeStore } from '@/store/volumeStore';
 
 interface AddVolumeButtonProps {
   onCreate: (volumeData: any) => void;
@@ -13,6 +14,7 @@ interface AddVolumeButtonProps {
 const AddVolumeButton = ({ onCreate }: AddVolumeButtonProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const addVolume = useVolumeStore((state) => state.addVolume);
 
   const handleCreateVolume = (
     id: string,
@@ -32,6 +34,8 @@ const AddVolumeButton = ({ onCreate }: AddVolumeButtonProps) => {
 
     // 부모 컴포넌트로 생성된 볼륨 데이터 전달
     onCreate(newVolumeData);
+    // store에 볼륨 데이터 저장
+    addVolume(newVolumeData);
     console.log('new volume ::', newVolumeData);
 
     showSnackbar(
