@@ -6,6 +6,7 @@ import { useStore } from '@/store/cardStore';
 import { v4 as uuidv4 } from 'uuid';
 import { useSnackbar } from 'notistack';
 import { showSnackbar } from '@/utils/toastUtils';
+import { useSelectedNetworkStore } from '@/store/selectedNetworkStore'; // 새로운 전역 상태 가져오기
 
 interface Volume {
   id: string;
@@ -50,10 +51,10 @@ const getStatusColors = (status: string) => {
 
 const ContainerCard = ({ data, selectedHostId }: CardDataProps) => {
   const { enqueueSnackbar } = useSnackbar();
+  const { selectedNetwork } = useSelectedNetworkStore();
   const { bg1, bg2 } = getStatusColors(data.status || 'primary');
   const [showOptions, setShowOptions] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [selectedNetwork, setSelectedNetwork] = useState<string | null>(null); // 선택된 네트워크 상태 추가
   const cardRef = useRef<HTMLDivElement>(null);
   const addContainerToHost = useStore((state) => state.addContainerToHost);
 
