@@ -19,6 +19,8 @@ export interface CardContainerProps {
     textColor: string;
   };
   onDelete?: () => void;
+  onSelectNetwork?: () => void; // 네트워크 선택 시 호출되는 함수
+  isSelected?: boolean; // 선택된 상태
 }
 
 const CardContainer = ({
@@ -27,13 +29,30 @@ const CardContainer = ({
   containers,
   themeColor,
   onDelete,
+  onSelectNetwork,
+  isSelected, // 선택된 상태
 }: CardContainerProps) => {
+  const handleNetworkClick = () => {
+    if (onSelectNetwork) {
+      onSelectNetwork();
+    }
+  };
+
   return (
-    <div className="relative flex flex-col items-center p-[10px] border bg-white border-grey_3 rounded-lg shadow-lg w-[450px] transition-colors duration-200">
-      {/* 삭제 버튼 */}
+    <div
+      className="relative flex flex-col items-center p-[10px] border bg-white rounded-lg shadow-lg w-[450px] transition-colors duration-200 cursor-pointer"
+      onClick={handleNetworkClick}
+      style={{
+        borderColor: isSelected ? themeColor.textColor : '',
+        backgroundColor: isSelected ? '#F4F4F4' : 'white',
+      }}
+    >
       {onDelete && (
         <button
-          onClick={onDelete}
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete?.();
+          }}
           className="absolute top-2 right-2 hover:text-gray-500 transition-colors duration-200 hover:scale-105"
         >
           <FaTimesCircle
@@ -51,7 +70,6 @@ const CardContainer = ({
           color: `${themeColor.textColor}`,
         }}
       >
-        {/* 네트워크 IP 표시 */}
         {`${networkName} : ${networkIp}`}
       </div>
       {containers.length > 0 ? (
