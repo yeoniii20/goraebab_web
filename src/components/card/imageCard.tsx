@@ -28,7 +28,7 @@ interface CardProps {
 
 interface CardDataProps {
   data: CardProps;
-  selectedHostId: string | null; // 추가된 prop
+  selectedHostId: string | null;
 }
 
 /**
