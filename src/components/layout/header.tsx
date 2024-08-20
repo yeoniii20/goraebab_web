@@ -2,9 +2,9 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useMenuStore } from '@/store/store';
 import { Tooltip } from 'react-tooltip';
 import { MENU_ITEMS } from '@/data/menu';
+import { useMenuStore } from '@/store/menuStore';
 
 const Header = () => {
   const { activeId, setActiveId } = useMenuStore();
