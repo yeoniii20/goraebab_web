@@ -9,7 +9,7 @@ import VolumeCard from '../card/volumeCard';
 import AddVolumeButton from '../button/addVolumeButton';
 import AddContainerButton from '../button/addContainerButton';
 import AddImageButton from '../button/addImageButton';
-import { useMenuStore } from '@/store/store';
+import { useMenuStore } from '@/store/menuStore';
 
 interface SidebarProps {
   data: any[];
