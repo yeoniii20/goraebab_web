@@ -6,7 +6,7 @@ interface Volume {
   driver: string;
   mountPoint: string;
   capacity: string;
-  status: string;
+  status?: string;
 }
 
 interface VolumeStore {
