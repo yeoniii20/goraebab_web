@@ -81,7 +81,7 @@ const CardContainer = ({
           ))}
         </div>
       ) : (
-        <div className="w-full text-center text-gray-500 p-4">
+        <div className="w-full h-36 text-center text-gray-500 p-4">
           No containers available
         </div>
       )}
