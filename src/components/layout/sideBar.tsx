@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, Card, ProgressBar } from '@/components';
+import { Button, ProgressBar } from '@/components';
 import { selectedHostStore } from '@/store/seletedHostStore';
 import AddBridgeButton from '../button/addBridgeButton';
 import NetworkCard from '../card/networkCard';
@@ -10,6 +10,8 @@ import AddVolumeButton from '../button/addVolumeButton';
 import AddContainerButton from '../button/addContainerButton';
 import AddImageButton from '../button/addImageButton';
 import { useMenuStore } from '@/store/menuStore';
+import ImageCard from '../card/imageCard';
+import ContainerCard from '../card/containerCard';
 
 interface SidebarProps {
   data: any[];
@@ -48,7 +50,7 @@ const Sidebar = ({ data, progress }: SidebarProps) => {
           <>
             {containerData.length > 0 ? (
               containerData.map((container, index) => (
-                <Card
+                <ContainerCard
                   key={index}
                   data={container}
                   selectedHostId={selectedHostId}
@@ -62,7 +64,7 @@ const Sidebar = ({ data, progress }: SidebarProps) => {
           <>
             {imageData.length > 0 ? (
               imageData.map((image, index) => (
-                <Card
+                <ImageCard
                   key={index}
                   data={image}
                   selectedHostId={selectedHostId}
@@ -101,11 +103,7 @@ const Sidebar = ({ data, progress }: SidebarProps) => {
             )}
           </>
         ) : (
-          <>
-            {data.map((item, index) => (
-              <Card key={index} data={item} selectedHostId={selectedHostId} />
-            ))}
-          </>
+          <></>
         )}
       </div>
       <div className="flex-shrink-0">
