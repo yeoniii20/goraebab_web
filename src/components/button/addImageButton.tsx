@@ -4,14 +4,16 @@ import React, { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { showSnackbar } from '@/utils/toastUtils';
 import ImageModal from '../modal/image/imageModal';
+import { useImageStore } from '@/store/imageStore';
 
 interface AddImageButtonProps {
-  onCreate: (imageData: any) => void; // 이미지 데이터를 부모 컴포넌트로 전달하는 콜백
+  onCreate: (imageData: any) => void;
 }
 
 const AddImageButton = ({ onCreate }: AddImageButtonProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const addImage = useImageStore((state) => state.addImage);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -36,7 +38,9 @@ const AddImageButton = ({ onCreate }: AddImageButtonProps) => {
     };
 
     // 부모 컴포넌트로 이미지 데이터 전달
+    // store에 이미지 데이터 저장
     onCreate(imageData);
+    addImage(imageData);
 
     // 성공 메시지 표시
     showSnackbar(
