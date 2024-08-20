@@ -8,11 +8,10 @@ import {
   NETWORK_CARD_DATA,
   VOLUME_CARD_DATA,
 } from '@/data/mock';
-import { useMenuStore } from '@/store/store';
 import AddHostButton from '../button/addHostButton';
 import { SnackbarProvider } from 'notistack';
 import SaveButton from '../button/saveButton';
-import AddBridgeButton from '../button/addBridgeButton';
+import { useMenuStore } from '@/store/menuStore';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { activeId } = useMenuStore();
