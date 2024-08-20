@@ -51,7 +51,7 @@ const getStatusColors = (status: string) => {
   }
 };
 
-const Card = ({ data, selectedHostId }: CardDataProps) => {
+const ImageCard = ({ data, selectedHostId }: CardDataProps) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const id = uuidv4();
@@ -176,4 +176,4 @@ const Card = ({ data, selectedHostId }: CardDataProps) => {
   );
 };
 
-export default Card;
+export default ImageCard;
