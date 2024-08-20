@@ -17,6 +17,7 @@ export type HostCardProps = {
   networkIp: string;
   onClick?: () => void;
   className?: string;
+  isSelectedNetwork?: boolean; // 네트워크가 선택된 상태인지 여부
 };
 
 const HostCard = ({
@@ -26,6 +27,7 @@ const HostCard = ({
   isRemote,
   themeColor,
   className = '',
+  isSelectedNetwork = false, // 기본값은 false
 }: HostCardProps) => {
   const { selectedHostId, setSelectedHostId } = selectedHostStore();
   const deleteHost = useHostStore((state) => state.deleteHost);
@@ -38,13 +40,17 @@ const HostCard = ({
     setSelectedHostId(selectedHostId === id ? null : id);
   };
 
-  const borderColor = selectedHostId === id ? themeColor.borderColor : 'grey';
+  // 선택된 호스트 또는 네트워크에 따라 테두리 색상을 설정
+  const borderColor =
+    selectedHostId === id || isSelectedNetwork
+      ? themeColor.borderColor
+      : 'grey';
   const badgeText = isRemote ? 'REMOTE' : 'LOCAL';
 
   return (
     <div
       className={`${className} relative transition-transform duration-200 ${
-        selectedHostId === id ? 'transform scale-105' : ''
+        selectedHostId === id || isSelectedNetwork ? 'transform scale-105' : ''
       }`}
     >
       <div
@@ -65,10 +71,10 @@ const HostCard = ({
         className={`relative flex flex-col items-center p-[10px] border bg-white rounded-lg shadow-lg w-72 h-28 cursor-pointer`}
         style={{
           borderColor: borderColor,
-          borderWidth: selectedHostId === id ? '2px' : '1px',
+          borderWidth:
+            selectedHostId === id || isSelectedNetwork ? '2px' : '1px',
         }}
       >
-        {/* 호스트 삭제 버튼 (호스트가 선택된 경우에만 버튼 표시) */}
         {selectedHostId === id && (
           <button
             onClick={handleDeleteHost}
