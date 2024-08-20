@@ -61,7 +61,7 @@ const VolumeModal = ({ onClose, onCreate }: VolumeModalProps) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-      <div className="relative bg-white p-6 rounded-md shadow-lg">
+      <div className="relative bg-white p-6 rounded-md shadow-lg w-2/5">
         <h2 className="text-lg font-semibold mb-4">Create Volume</h2>
         <input
           type="text"
