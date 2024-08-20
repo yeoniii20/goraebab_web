@@ -20,17 +20,7 @@ interface CardProps {
   ip?: string;
   size: string;
   tags: string;
-  /**
-   * running
-   * stopped
-   */
   active?: string;
-  /**
-   * primary
-   * secondary
-   * accent
-   * success
-   */
   status: string;
   image?: string;
   volumes?: Volume[];
@@ -40,13 +30,9 @@ interface CardProps {
 interface CardDataProps {
   data: CardProps;
   selectedHostId: string | null;
+  onSelectNetwork?: (networkName: string) => void;
 }
 
-/**
- *
- * @param status card의 상태 값
- * @returns status에 따른 색상을 반환
- */
 const getStatusColors = (status: string) => {
   switch (status) {
     case 'primary':
@@ -67,10 +53,9 @@ const ContainerCard = ({ data, selectedHostId }: CardDataProps) => {
   const { bg1, bg2 } = getStatusColors(data.status || 'primary');
   const [showOptions, setShowOptions] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [selectedNetwork, setSelectedNetwork] = useState<string | null>(null); // 선택된 네트워크 상태 추가
   const cardRef = useRef<HTMLDivElement>(null);
   const addContainerToHost = useStore((state) => state.addContainerToHost);
-
-  console.log('container data >>>', data);
 
   const items = [
     { label: 'ID', value: data.id },
@@ -89,14 +74,31 @@ const ContainerCard = ({ data, selectedHostId }: CardDataProps) => {
   };
 
   const handleRun = () => {
+    if (!selectedNetwork) {
+      showSnackbar(
+        enqueueSnackbar,
+        '네트워크를 선택해주세요.',
+        'error',
+        '#FF4853'
+      );
+      return;
+    }
+
     if (selectedHostId) {
       const newContainer = {
         id: uuidv4(),
         name: data.name,
         ip: data.ip,
         active: data.active,
+        network: selectedNetwork,
       };
       addContainerToHost(selectedHostId, newContainer);
+      showSnackbar(
+        enqueueSnackbar,
+        `호스트 ${selectedHostId}의 ${selectedNetwork} 네트워크에서 컨테이너가 실행되었습니다.`,
+        'success',
+        '#4C48FF'
+      );
     } else {
       showSnackbar(
         enqueueSnackbar,
@@ -179,9 +181,9 @@ const ContainerCard = ({ data, selectedHostId }: CardDataProps) => {
           </div>
         ))}
         {/* 볼륨 정보 표시 */}
-        <div className="mt-2">
+        <div className="flex mt-2">
           <p
-            className="text-xs py-1 w-[65px] rounded-md font-bold text-center mb-2"
+            className="text-xs py-1 w-[65px] h-6 mr-2 rounded-md font-bold text-center mb-2"
             style={{ backgroundColor: bg1, color: bg2 }}
           >
             VOLUME
@@ -193,7 +195,7 @@ const ContainerCard = ({ data, selectedHostId }: CardDataProps) => {
                 className="flex flex-col mb-2 p-1 border rounded"
               >
                 <p className="text-xs font-semibold">
-                  {typeof item === 'string' ? item : JSON.stringify(item)}
+                  {typeof item === 'string' ? item : item.name}
                 </p>
               </div>
             ))}
