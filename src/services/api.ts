@@ -52,3 +52,10 @@ export const getContainersList = async () => {
   const response = await axios.get('/api/docker/containers');
   return response.data;
 };
+
+// 여기서부터
+
+export const getConnectDaemon = async () => {
+  const response = await axios.get('/api/daemon');
+  return response.data;
+};
