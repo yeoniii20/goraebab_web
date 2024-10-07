@@ -11,14 +11,24 @@ interface ModalProps {
   onConfirm: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({
+/**
+ * 모달 컴포넌트
+ * @param question 모달 텍스트 (default: 정말로 삭제하시겠습니까?)
+ * @param confirmText 확인 텍트스 (default: 삭제)
+ * @param closeText 닫기 텍스트 (default: 취소)
+ * @param isOpen 모달 open 유무
+ * @param onClose 모달 닫기 핸들러
+ * @param onConfirm 모달 확인 핸들러
+ * @returns
+ */
+const Modal = ({
   question,
   confirmText,
   closeText,
   isOpen,
   onClose,
   onConfirm,
-}) => {
+}: ModalProps) => {
   if (!isOpen) return null;
 
   return (
@@ -33,7 +43,7 @@ const Modal: React.FC<ModalProps> = ({
         </p>
         <div className="flex justify-center space-x-3 md:space-x-5">
           <button
-            className="w-24 sm:w-28 md:w-32 2xl:w-40 py-2 2xl:py-3 bg-red_1 text-red_2 rounded-lg font-bold text-sm md:text-base 2xl:text-xl"
+            className="w-24 sm:w-28 md:w-32 2xl:w-40 py-2 2xl:py-3 bg-red_1 text-red_6 rounded-lg font-bold text-sm md:text-base 2xl:text-xl"
             onClick={onConfirm}
           >
             {confirmText || '삭제'}

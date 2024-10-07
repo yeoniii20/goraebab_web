@@ -12,6 +12,7 @@ import AddHostButton from '../button/addHostButton';
 import { SnackbarProvider } from 'notistack';
 import SaveButton from '../button/saveButton';
 import { useMenuStore } from '@/store/menuStore';
+import DeleteBlueprintButton from '../button/deleteBlueprintButton';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { activeId } = useMenuStore();
@@ -51,9 +52,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             </main>
             <div className="flex flex-col">
               {/* <ZoomButtons /> */}
-              <Sidebar data={cardData} progress={30} />
+              <Sidebar progress={30} />
               <PanButtons />
               <AddHostButton />
+              <DeleteBlueprintButton />
               <SaveButton />
             </div>
           </div>

@@ -1,26 +1,11 @@
 'use client';
 
-import { getConnectDaemon } from '@/services/api';
-import { useEffect } from 'react';
-
-// import ContainersManagement from '@/components/docker/containersManagement';
-// import DBManagement from '@/components/docker/dbManagement';
-// import DockerManagement from '@/components/docker/dockerManagement';
-// import HarborManagement from '@/components/docker/harborManagement';
+import React from 'react';
 
 const VolumePage = () => {
-  // const fetchDaemon = async () => {
-  //   const data = await getConnectDaemon();
-  //   console.log(data);
-  // };
-
-  // useEffect(() => {
-  //   fetchDaemon();
-  // }, []);
-
   const handleApiTest = async () => {
     try {
-      const response = await fetch('/api/daemon');
+      const response = await fetch('/api/remote/daemon');
 
       if (response.ok) {
         const data = await response.json();
@@ -38,10 +23,6 @@ const VolumePage = () => {
     <>
       <h1>Management Dashboard</h1>
       <button onClick={handleApiTest}>Api test</button>
-      {/* <DockerManagement />
-      <DBManagement />
-      <HarborManagement />
-      <ContainersManagement /> */}
     </>
   );
 };
